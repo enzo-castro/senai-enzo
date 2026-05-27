@@ -14,15 +14,26 @@
 
   <style>
 
+.video-bg{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
     body{
-      background:#bebebe;
-      height: 100vh;
+      background-color: #bebebe;
+      height:100vh;
       display:flex;
       justify-content:center;
       align-items:center;
     }
 
     .card{
+        background-color: rgba(132, 9, 163, 0.719);
       width:100%;
       max-width:500px;
       border:rgb(0, 0, 0) 2px solid;
@@ -33,6 +44,10 @@
 </head>
 
 <body>
+
+ <video autoplay muted loop class="video-bg">
+    <source src="189172-884987257_medium.mp4" type="video/mp4">
+  </video>
 
   <div class="card shadow p-3">
 
