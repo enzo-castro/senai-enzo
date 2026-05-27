@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem Vindo ao Senai Enzo</title>
+    <title>Document</title>
 </head>
-
-
+<script>
+ function myFunction() {
+    let imput = document.getElementById("myInput")
+    let div = document.getElementById("myDiv")
+  for(let i = 0; i < 10; i++) {
+    div.innerHTML += imput.value + "<br>"
+  }
+ }
+</script>
 <body>
- <div>
-<h1 style="background-color: rgba(0, 0, 0, 0.219);">O que é memória RAM?</h1>
-<p>A memória RAM (acrônimo para Random Access Memory, ou Memória de Acesso Aleatório) é uma peça essencial para os computadores, telefones e videogames, sendo a memória principal desses sistemas. Ela permite armazenar dados de maneira temporária e é responsável pela leitura e escrita veloz dos dados, enviando e recebendo-os do processador para que toda a máquina funcione em equilíbrio.</p><br>
-<p><b> SRAM (Static Random Access Memory): É mais rápida que a DRAM, já que armazena os dados em um circuito flip-flop, permitindo as informações fiquem estaticamente guardadas;</p></b><br>
-<p><b>SDRAM (Synchronous Dynamic Random Access Memory): Trabalha de maneira sincronizada com a frequência do sistema, permitindo uma operação mais estável. Não são mais usadas como memória principal do sistema;</b><br>
-
- </div>
-
- 
+    <input type="text" id="myInput" placeholder="Digite algo...">
+    <button onclick="myFunction()">clique em mim</button>
+    <div id="myDiv"></div>
 </body>
-
-
 </html>
