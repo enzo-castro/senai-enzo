@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>document</title>
+    </title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+</head>
+
+<script>
+
+function login() {
+  let email = document.getElementById("email").value;
+  let senha = document.getElementById("senha").value;
+  if(email === "teste@gmail.com" && senha === "16062009") {
+    alert("Login bem-sucedido!");
+    mostraHome();
+    escondeLogin();
+} 
+else {
+    alert("Login falhou! Verifique seu email e senha.");
+}
+}
+
+  function logout(){ 
+    esconderHome();
+    mostrarLogin();
+  }
+
+function mostraHome() {
+  let telaHome = document.getElementById("home").style.display = "block";
+
+}
+
+function escondeLogin() {
+  let telaLogin = document.getElementById("login").style.display = "none";
+}
+
+function esconderHome() {
+ document.getElementById("home").style.display = "none";
+  }
+  
+  function mostrarLogin() {
+document.getElementById("login").style.display = "block";
+  }
+</script>
+<Style>
+    body{
+        background-color: black;
+        color: white;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+    .estilo{
+        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+    }
+    .fundo{
+        background-image: url("primevideo-seo-logo-630x360.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 200vh;
+        height: 100vh;
+    }
+
+    .btnsair{
+      align-items: center;
+      justify-content: center;
+    }
+    
+
+</Style>
+
+<body>
+
+    <section  class="fundo" style="font-family: Arial, Helvetica, sans-serif;" id="login">
+    <div>
+
+        <h1>Seja bem-vindo</h1></div>
+   <input type="email" placeholder="Digite seu email..." id="email"><br>
+   <input type="senha" placeholder="Digite sua senha..." id="senha"><br>
+   <input type="button" class="btn btn-primary" value="Entrar" onclick="login()"><br>
+    </section>
+    <section class="" id="home" style="display:none;">
+    <div class="estilo"><h1> Prime Video</h1></div>
+    <div><h1>Filmes, séries, esportes e muito mais</h1></div><br>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Padrão com anúncios:</h5>
+        <p class="card-text"> R$ 20,90/mês.</p>
+        <a href="#" class="btn btn-primary">clique aqui</a>
+      </div>
+    </div>
+  </div><br>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Premium:</h5>
+        <p class="card-text">R$ 59,90/mês, com 4 telas simultâneas e qualidade 4K Ultra HD.</p>
+        <a href="#" class="btn btn-primary">clique aqui</a>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<div class="btnsair"><input type="button" class="btn btn-dark" value="Sair" onclick="logout()" ></div><br>
+    </section>
+</body> 
+</body>
+</html>
