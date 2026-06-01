@@ -65,10 +65,19 @@ document.getElementById("login").style.display = "block";
         width: 200vh;
         height: 100vh;
     }
+    .image{
+      background-image: url("image.png");
+        background-size: cover;
+        background-position: center; 
+        background-repeat: no-repeat;
+        width: 215vh;
+        height: 95vh;
+    }
 
     .btnsair{
       align-items: center;
       justify-content: center;
+      display: flex;
     }
     
 
@@ -84,12 +93,12 @@ document.getElementById("login").style.display = "block";
    <input type="senha" placeholder="Digite sua senha..." id="senha"><br>
    <input type="button" class="btn btn-primary" value="Entrar" onclick="login()"><br>
     </section>
-    <section class="" id="home" style="display:none;">
+    <section class="image" id="home" style="display:none;">
     <div class="estilo"><h1> Prime Video</h1></div>
     <div><h1>Filmes, séries, esportes e muito mais</h1></div><br>
 <div class="row">
-  <div class="col-sm-6">
-    <div class="card">
+  <div class="col-sm-6 mb-3 smb-5">
+    <div class="card" style="width: 50%;"margin-right: 20px;>
       <div class="card-body">
         <h5 class="card-title">Padrão com anúncios:</h5>
         <p class="card-text"> R$ 20,90/mês.</p>
@@ -97,8 +106,8 @@ document.getElementById("login").style.display = "block";
       </div>
     </div>
   </div><br>
-  <div class="col-sm-6">
-    <div class="card">
+  <div class="col-sm-6 mb-3 smb-5">
+    <div class="card" style="width: 60%;" style="margin-right: 20px;">
       <div class="card-body">
         <h5 class="card-title">Premium:</h5>
         <p class="card-text">R$ 59,90/mês, com 4 telas simultâneas e qualidade 4K Ultra HD.</p>
