@@ -1,125 +1,371 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>document</title>
-    </title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prime Video Clone</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0f171e;
+    color: white;
+}
+
+.fundo {
+    background: linear-gradient(
+        rgba(15, 23, 30, 0.85),
+        rgba(15, 23, 30, 0.95)
+    ),
+    url("primevideo-seo-logo-630x360.jpg");
+
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background: rgba(0,0,0,0.75);
+    padding: 40px;
+    border-radius: 15px;
+    width: 350px;
+    text-align: center;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 25px rgba(0,168,225,0.3);
+}
+
+.login-box h1 {
+    color: #00a8e1;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.login-box input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+.btn-prime {
+    background: #00a8e1;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-prime:hover {
+    background: #008dc0;
+}
+
+.home {
+    min-height: 100vh;
+    background: #0f171e;
+    padding: 40px;
+}
+
+.logo {
+    color: #00a8e1;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.subtitulo {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.card {
+    background: #1a242f;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.btn-sair {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.card img {
+    height: 350px;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+}
+
+.card {
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.card:hover img {
+    transform: scale(1.08);
+}
+
+.card img {
+    transition: 0.4s;
+}
+</style>
 
 <script>
-
 function login() {
-  let email = document.getElementById("email").value;
-  let senha = document.getElementById("senha").value;
-  if(email === "teste@gmail.com" && senha === "15012010") {
-    alert("Login bem-sucedido!");
-    mostraHome();
-    escondeLogin();
-} 
-else {
-    alert("Login falhou! Verifique seu email e senha.");
-}
-}
 
-  function logout(){ 
-    esconderHome();
-    mostrarLogin();
-  }
+    let email = document.getElementById("email").value;
+    let senha = document.getElementById("senha").value;
 
-function mostraHome() {
-  let telaHome = document.getElementById("home").style.display = "block";
+    if (email === "teste@gmail.com" && senha === "15012010") {
 
+        alert("Login realizado com sucesso!");
+
+        document.getElementById("login").style.display = "none";
+        document.getElementById("home").style.display = "block";
+
+    } else {
+
+        alert("Email ou senha incorretos!");
+
+    }
 }
 
-function escondeLogin() {
-  let telaLogin = document.getElementById("login").style.display = "none";
-}
+function logout() {
 
-function esconderHome() {
- document.getElementById("home").style.display = "none";
-  }
-  
-  function mostrarLogin() {
-document.getElementById("login").style.display = "block";
-  }
+    document.getElementById("home").style.display = "none";
+    document.getElementById("login").style.display = "flex";
+
+}
 </script>
-<Style>
-    body{
-        background-color: black;
-        color: white;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-    }
-    .estilo{
-        font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
-    }
-    .fundo{
-        background-image: url("primevideo-seo-logo-630x360.jpg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        width: 200vh;
-        height: 100vh;
-    }
-    .image{
-      background-image: url("image.png");
-        background-size: cover;
-        background-position: center; 
-        background-repeat: no-repeat;
-        width: 215vh;
-        height: 95vh;
-    }
 
-    .btnsair{
-      align-items: center;
-      justify-content: center;
-      display: flex;
-    }
-    
-
-</Style>
+</head>
 
 <body>
 
-    <section  class="fundo" style="font-family: Arial, Helvetica, sans-serif;" id="login">
-    <div>
+<section class="fundo" id="login">
 
-        <h1>Seja bem-vindo</h1></div>
-   <input type="email" placeholder="Digite seu email..." id="email"><br>
-   <input type="senha" placeholder="Digite sua senha..." id="senha"><br>
-   <input type="button" class="btn btn-primary" value="Entrar" onclick="login()"><br>
-    </section>
-    <section class="image" id="home" style="display:none;">
-    <div class="estilo"><h1> Prime Video</h1></div>
-    <div><h1>Filmes, séries, esportes e muito mais</h1></div><br>
-<div class="row">
-  <div class="col-sm-6 mb-3 smb-5">
-    <div class="card" style="width: 50%;"margin-right: 20px;>
-      <div class="card-body">
-        <h5 class="card-title">Padrão com anúncios:</h5>
-        <p class="card-text"> R$ 20,90/mês.</p>
-        <a href="#" class="btn btn-primary">clique aqui</a>
-      </div>
+    <div class="login-box">
+
+        <h1>Prime Video</h1>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Digite seu email">
+
+        <input
+            type="password"
+            id="senha"
+            placeholder="Digite sua senha">
+
+        <button
+            class="btn-prime"
+            onclick="login()">
+            Entrar
+        </button>
+
     </div>
-  </div><br>
-  <div class="col-sm-6 mb-3 smb-5">
-    <div class="card" style="width: 60%;" style="margin-right: 20px;">
-      <div class="card-body">
-        <h5 class="card-title">Premium:</h5>
-        <p class="card-text">R$ 59,90/mês, com 4 telas simultâneas e qualidade 4K Ultra HD.</p>
-        <a href="#" class="btn btn-primary">clique aqui</a>
-      </div>
+
+</section>
+
+<section
+    class="home"
+    id="home"
+    style="display:none;">
+
+    <h1 class="logo">Prime Video</h1>
+
+    <h3 class="subtitulo">
+        Filmes, séries, esportes e muito mais
+    </h3>
+<hr class="my-5">
+
+<h2 class="mb-4 text-info">🔥 Destaques da Semana</h2>
+
+<div class="row g-4">
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <img src="OIP.jpeg"
+                 class="card-img-top"
+                 alt="The Boys">
+            <div class="card-body">
+                <h5 class="card-title">The Boys</h5>
+                <p class="card-text">
+                    Super-heróis famosos escondem um lado sombrio e perigoso.
+                </p>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <img src="reacherseason3-1.jpeg"
+                 class="card-img-top"
+                 alt="Reacher">
+            <div class="card-body">
+                <h5 class="card-title">Reacher</h5>
+                <p class="card-text">
+                    Um ex-policial militar investiga uma conspiração mortal.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <img src="fallout.jpeg"
+                 class="card-img-top"
+                 alt="Fallout">
+            <div class="card-body">
+                <h5 class="card-title">Fallout</h5>
+                <p class="card-text">
+                    Sobreviventes exploram um mundo devastado após uma guerra nuclear.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card h-100">
+            <img src="prte-do-poster-de-invencivel-1140x570.jpg"
+                 class="card-img-top"
+                 alt="Invincible">
+            <div class="card-body">
+                <h5 class="card-title">Invincible</h5>
+                <p class="card-text">
+                    Um jovem descobre que herdou poderes do maior herói do planeta.
+                </p>
+            </div>
+        </div>
+    </div>
+
 </div>
-  </div>
+
+<hr class="my-5">
+
+<h2 class="mb-4 text-info">🎬 Filmes em Alta</h2>
+
+<div class="row g-4">
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="road house.jpeg"
+                 class="card-img-top"
+                 alt="Road House">
+            <div class="card-body">
+                <h5 class="card-title">Road House</h5>
+                <p class="card-text">
+                    Um ex-lutador protege um bar em uma cidade cheia de conflitos.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="https://images.justwatch.com/poster/303512232/s718/air.jpg"
+                 class="card-img-top"
+                 alt="Air">
+            <div class="card-body">
+                <h5 class="card-title">Air</h5>
+                <p class="card-text">
+                    A história da parceria que transformou Michael Jordan em ícone.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <img src="https://images.justwatch.com/poster/312432612/s718/argylle.jpg"
+                 class="card-img-top"
+                 alt="Argylle">
+            <div class="card-body">
+                <h5 class="card-title">Argylle</h5>
+                <p class="card-text">
+                    Uma escritora de espionagem entra em uma trama internacional.
+                </p>
+            </div>
+        </div>
+    </div>
+
 </div>
-<div class="btnsair"><input type="button" class="btn btn-dark" value="Sair" onclick="logout()" ></div><br>
-    </section>
-</body> 
+
+
+    <div class="container">
+
+        <div class="row g-4">
+
+            <div class="col-md-6">
+                <div class="card p-4">
+
+                    <h3>Padrão com anúncios</h3>
+
+                    <p>
+                        R$ 20,90 por mês
+                    </p>
+
+                    <button class="btn btn-primary">
+                        Assinar
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card p-4">
+
+                    <h3>Premium</h3>
+
+                    <p>
+                        R$ 59,90 por mês com
+                        4 telas simultâneas e
+                        qualidade 4K Ultra HD.
+                    </p>
+
+                    <button class="btn btn-primary">
+                        Assinar
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="btn-sair">
+
+            <button
+                class="btn btn-danger"
+                onclick="logout()">
+                Sair
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
+
