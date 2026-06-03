@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário — Programador Front-End | SENAI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+
+  :root {
+    --blue-deep: #0A2463;
+    --blue-mid:  #1E5FA8;
+    --blue-bright: #3D96F5;
+    --gold: #F4C430;
+    --teal: #00C9A7;
+    --bg: #F4F6FB;
+    --white: #FFFFFF;
+    --text: #1C2340;
+    --text-light: #556085;
+    --border: #D4DCF0;
+    --correct: #00C9A7;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--blue-deep);
+    color: white;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -80px;
+    width: 340px; height: 340px;
+    background: radial-gradient(circle, rgba(61,150,245,0.25) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(244,196,48,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 44px 32px 40px;
+    position: relative;
+    z-index: 2;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 50px;
+    padding: 5px 14px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .header-badge span { color: rgba(255,255,255,0.6); }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+  h1 em { color: var(--gold); font-style: normal; }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .meta-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+  }
+  .meta-chip svg { opacity: 0.7; flex-shrink: 0; }
+
+  /* ── TABS ── */
+  .tabs-bar {
+    background: var(--white);
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(10,36,99,0.06);
+  }
+  .tabs-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs-inner::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 14px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-light);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { color: var(--blue-mid); }
+  .tab-btn.active {
+    color: var(--blue-deep);
+    font-weight: 700;
+    border-bottom-color: var(--blue-bright);
+  }
+  .tab-btn .tab-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--bg);
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 6px;
+    color: var(--text-light);
+  }
+  .tab-btn.active .tab-num {
+    background: var(--blue-deep);
+    color: white;
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 36px 32px 64px;
+  }
+
+  /* ── SECTION ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding: 22px 24px;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--blue-bright);
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-bright));
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 20px;
+  }
+  .section-info h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--blue-deep);
+    margin-bottom: 4px;
+  }
+  .section-info p {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    transition: box-shadow 0.2s;
+  }
+  .question-card:hover {
+    box-shadow: 0 4px 20px rgba(10,36,99,0.08);
+  }
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .q-number {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--blue-deep);
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .q-text {
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text);
+    padding-top: 4px;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 44px;
+  }
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13.5px;
+    color: var(--text);
+    background: var(--bg);
+    user-select: none;
+  }
+  .option:hover {
+    border-color: var(--blue-bright);
+    background: rgba(61,150,245,0.06);
+  }
+  .option.selected {
+    border-color: var(--blue-mid);
+    background: rgba(30,95,168,0.07);
+    color: var(--blue-deep);
+    font-weight: 500;
+  }
+  .option.correct {
+    border-color: var(--correct);
+    background: rgba(0,201,167,0.08);
+    color: #007A63;
+    font-weight: 600;
+  }
+  .option.wrong {
+    border-color: #FF5C5C;
+    background: rgba(255,92,92,0.07);
+    color: #C0392B;
+  }
+  .option-letter {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    background: white;
+    color: var(--text-light);
+    transition: all 0.15s;
+  }
+  .option.selected .option-letter {
+    background: var(--blue-mid);
+    border-color: var(--blue-mid);
+    color: white;
+  }
+  .option.correct .option-letter {
+    background: var(--correct);
+    border-color: var(--correct);
+    color: white;
+  }
+  .option.wrong .option-letter {
+    background: #FF5C5C;
+    border-color: #FF5C5C;
+    color: white;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 50px;
+    height: 5px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--blue-mid), var(--blue-bright));
+    transition: width 0.4s ease;
+  }
+
+  /* ── SCORE BOX ── */
+  .score-box {
+    background: var(--blue-deep);
+    color: white;
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+  }
+  .score-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 4px;
+  }
+  .score-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+  }
+  .score-value span { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.5); }
+  .check-btn {
+    flex-shrink: 0;
+    padding: 10px 22px;
+    border-radius: 9px;
+    background: var(--gold);
+    color: var(--blue-deep);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .check-btn:hover { opacity: 0.85; }
+  .check-btn:disabled { opacity: 0.4; cursor: default; }
+  .reset-btn {
+    padding: 10px 18px;
+    border-radius: 9px;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    border: 1px solid rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .reset-btn:hover { background: rgba(255,255,255,0.2); }
+
+  /* ── EXPORT GUIDE ── */
+  .export-guide {
+    background: linear-gradient(135deg, var(--blue-deep) 0%, #193580 100%);
+    border-radius: var(--radius);
+    padding: 28px 28px;
+    color: white;
+    margin-bottom: 32px;
+  }
+  .export-guide h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .step {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.85);
+  }
+  .step strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  /* ── GABARITO ── */
+  .gabarito-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(0,201,167,0.12);
+    color: #007A63;
+    border: 1px solid rgba(0,201,167,0.3);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* ── FEEDBACK ── */
+  .feedback-msg {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    margin-top: 10px;
+    margin-left: 44px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+  }
+  .feedback-msg.show { display: flex; }
+  .feedback-msg.ok { background: rgba(0,201,167,0.1); color: #007A63; border: 1px solid rgba(0,201,167,0.25); }
+  .feedback-msg.err { background: rgba(255,92,92,0.08); color: #C0392B; border: 1px solid rgba(255,92,92,0.2); }
+
+  @media (max-width: 600px) {
+    main { padding: 24px 16px 48px; }
+    .header-inner { padding: 28px 20px 28px; }
+    .tabs-inner { padding: 0 16px; }
+    .score-box { flex-direction: column; align-items: flex-start; }
+    .options { padding-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-badge">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="5" fill="#F4C430"/></svg>
+      <span>SENAI · FIRJAN</span> &nbsp;|&nbsp; Avaliação
+    </div>
+    <h1>Programador <em>Front-End</em><br>Módulo Básico</h1>
+    <p class="header-sub">Questionário de múltipla escolha com 10 questões por aula — desenvolvido para avaliação dos alunos do curso QUA0300-01.</p>
+    <div class="header-meta">
+      <div class="meta-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        4 Aulas
+      </div>
+      <div class="meta-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        40 Questões Total
+      </div>
+      <div class="meta-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        31 Alunos
+      </div>
+      <div class="meta-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Múltipla Escolha
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs-bar">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab(0)">🖥️ Aula 01 — html <span class="tab-num">10</span></button>
+    <button class="tab-btn" onclick="showTab(1)">📁 Aula 02 — css<span class="tab-num">10</span></button>
+    <button class="tab-btn" onclick="showTab(2)">🔀 Aula 03 — java script <span class="tab-num">10</span></button>
+    <button class="tab-btn" style="display:none" onclick="showTab(3)">🐳 Aula 04 — Docker <span class="tab-num">10</span></button>
+    <button class="tab-btn" style="display:none" onclick="showTab(4)">📋 Guia Google Forms</button>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════ AULA 01 ══════════════════════════ -->
+<div class="section active" id="section-0">
+  <div class="section-header">
+    <div class="section-icon">🖥️</div>
+    <div class="section-info">
+      <h2>Aula 01 — Apresentação e Iniciação à Informática</h2>
+      <p>Conceitos de TI, hardware, software, áreas de atuação (Front-End, Back-End, Full Stack), tecnologias web e sistema operacional.</p>
+    </div>
+  </div>
+  <div class="score-box" id="score-0">
+    <div>
+      <div class="score-label">Pontuação</div>
+      <div class="score-value" id="scoreVal-0">— <span>/ 10</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="reset-btn" onclick="resetSection(0)">↺ Reiniciar</button>
+      <button class="check-btn" onclick="checkSection(0)">Verificar Respostas</button>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-0" style="width:0%"></div></div>
+  <div id="questions-0"></div>
+</div>
+
+<!-- ══════════════════════════ AULA 02 ══════════════════════════ -->
+<div class="section" id="section-1">
+  <div class="section-header">
+    <div class="section-icon">📁</div>
+    <div class="section-info">
+      <h2>Aula 02 — Manipulação de Arquivos e Ética Digital</h2>
+      <p>Estrutura de diretórios, tipos de arquivos, direitos autorais, LGPD, Marco Civil da Internet e licenças de software.</p>
+    </div>
+  </div>
+  <div class="score-box" id="score-1">
+    <div>
+      <div class="score-label">Pontuação</div>
+      <div class="score-value" id="scoreVal-1">— <span>/ 10</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="reset-btn" onclick="resetSection(1)">↺ Reiniciar</button>
+      <button class="check-btn" onclick="checkSection(1)">Verificar Respostas</button>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-1" style="width:0%"></div></div>
+  <div id="questions-1"></div>
+</div>
+
+<!-- ══════════════════════════ AULA 03 ══════════════════════════ -->
+<div class="section" id="section-2">
+  <div class="section-header">
+    <div class="section-icon">🔀</div>
+    <div class="section-info">
+      <h2>Aula 03 — Gestão de Projetos e Git Básico</h2>
+      <p>Gestão de projetos, metodologias ágil vs. tradicional, ferramentas colaborativas (Trello, GitHub), controle de versão e comandos Git.</p>
+    </div>
+  </div>
+  <div class="score-box" id="score-2">
+    <div>
+      <div class="score-label">Pontuação</div>
+      <div class="score-value" id="scoreVal-2">— <span>/ 10</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="reset-btn" onclick="resetSection(2)">↺ Reiniciar</button>
+      <button class="check-btn" onclick="checkSection(2)">Verificar Respostas</button>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-2" style="width:0%"></div></div>
+  <div id="questions-2"></div>
+</div>
+
+<!-- ══════════════════════════ AULA 04 ══════════════════════════ -->
+<div class="section" id="section-3">
+  <div class="section-header">
+    <div class="section-icon">🐳</div>
+    <div class="section-info">
+      <h2>Aula 04 — Introdução ao Docker e Fechamento do Módulo</h2>
+      <p>Virtualização, diferença entre VM e Container, conceitos-chave do Docker (Image, Container, Dockerfile, Docker Hub) e comandos básicos.</p>
+    </div>
+  </div>
+  <div class="score-box" id="score-3">
+    <div>
+      <div class="score-label">Pontuação</div>
+      <div class="score-value" id="scoreVal-3">— <span>/ 10</span></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="reset-btn" onclick="resetSection(3)">↺ Reiniciar</button>
+      <button class="check-btn" onclick="checkSection(3)">Verificar Respostas</button>
+    </div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="prog-3" style="width:0%"></div></div>
+  <div id="questions-3"></div>
+</div>
+
+<!-- ══════════════════════════ GUIA ══════════════════════════ -->
+<div class="section" id="section-4">
+  <div class="section-header">
+    <div class="section-icon">📋</div>
+    <div class="section-info">
+      <h2>Como importar para o Google Forms</h2>
+      <p>Passo a passo para criar o formulário de avaliação no Google Forms com todas as 40 questões.</p>
+    </div>
+  </div>
+  <div class="export-guide">
+    <h3>📋 Passos para criar o Google Forms</h3>
+    <div class="steps">
+      <div class="step"><strong>Passo 1</strong>Acesse forms.google.com e clique em "+" para criar um novo formulário.</div>
+      <div class="step"><strong>Passo 2</strong>Dê o título: "Avaliação — Programador Front-End | Módulo Básico".</div>
+      <div class="step"><strong>Passo 3</strong>Adicione uma seção por aula (botão de seção). Nomeie cada seção com o título da aula.</div>
+      <div class="step"><strong>Passo 4</strong>Para cada pergunta, escolha o tipo "Múltipla escolha" e cole a pergunta + alternativas desta página.</div>
+      <div class="step"><strong>Passo 5</strong>Ative "Gabarito" (botão roxo "Questionário" nas configurações) e marque a alternativa correta em cada questão.</div>
+      <div class="step"><strong>Passo 6</strong>Nas configurações, ative "Reúna endereços de e-mail" para identificar os 31 alunos.</div>
+    </div>
+  </div>
+  <div id="gabarito-list"></div>
+</div>
+
+</main>
+
+<script>
+const DATA = [
+  // ══ AULA 01 ══
+  {
+    section: 0,
+    questions: [
+      {
+        q: "O que significa HTML?",
+        opts: [
+          "Hyper Text Markup Language",
+          "High Text Machine Language",
+          "Hyper Transfer Markup Language",
+          "Home Tool Markup Language"
+        ],
+        answer: 0
+      },
+      {
+        q: "Qual tag é usada para criar um parágrafo?",
+        opts: ["paragraph", "p", "text", "par"],
+        answer: 1
+      },
+      {
+        q: "Qual tag cria um link?",
+        opts: [
+          "<link>",
+          "<href>",
+          "<a>",
+          "<url>"
+        ],
+        answer: 2
+      },
+      {
+        q: "Quais tecnologias são utilizadas no desenvolvimento Front-End?",
+        opts: [
+          "Node.js, Python, Java e PHP",
+          "MySQL, MongoDB e PostgreSQL",
+          "HTML, CSS, JavaScript e React",
+          "Docker, Git, Linux e Apache"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual é a carga horária TOTAL do curso Programador Front-End do SENAI?",
+        opts: ["80 horas", "120 horas", "164 horas", "180 horas"],
+        answer: 3
+      },
+      {
+        q: "O que é um Sistema Operacional?",
+        opts: [
+          "Um aplicativo para criar planilhas e documentos de texto",
+          "Uma linguagem de programação usada no desenvolvimento web",
+          "O software responsável por gerenciar todos os recursos do computador e permitir que outros programas funcionem",
+          "Um hardware responsável pelo processamento de dados"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual atalho de teclado é utilizado para DESFAZER uma ação no computador?",
+        opts: ["Ctrl + C", "Ctrl + Z", "Ctrl + Y", "Ctrl + X"],
+        answer: 1
+      },
+      {
+        q: "No contexto da Matriz Curricular do curso, qual é o Módulo Básico?",
+        opts: [
+          "Desenvolvimento Web",
+          "FrontEnd Essencial",
+          "Lógica de Programação",
+          "Iniciação à Tecnologia da Informação"
+        ],
+        answer: 3
+      },
+      {
+        q: "O que é um DRIVER no contexto de software?",
+        opts: [
+          "Um aplicativo de edição de vídeo",
+          "A interface entre o sistema operacional e o hardware, permitindo que o SO controle dispositivos",
+          "Um tipo de banco de dados relacional",
+          "Um framework JavaScript para criação de interfaces"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual atalho de teclado abre o Explorador de Arquivos no Windows?",
+        opts: ["Win + D", "Win + L", "Win + E", "Alt + Tab"],
+        answer: 2
+      }
+    ]
+  },
+
+  // ══ AULA 02 ══
+  {
+    section: 1,
+    questions: [
+      {
+        q: "O que é a Estrutura Hierárquica de Diretórios?",
+        opts: [
+          "Um tipo de banco de dados usado para armazenar registros de usuários",
+          "A forma como o sistema operacional organiza arquivos e pastas em uma estrutura de árvore",
+          "Um método de compactação de arquivos para economizar espaço em disco",
+          "Uma linguagem de marcação para organizar conteúdo em páginas web"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual é a função da extensão de arquivo .html?",
+        opts: [
+          "Armazenar dados estruturados em formato de texto",
+          "Definir o estilo visual e o layout de uma página",
+          "Representar a estrutura de uma página web",
+          "Executar comportamentos e interações na página"
+        ],
+        answer: 2
+      },
+      {
+        q: "O que representa a extensão .css em um projeto web?",
+        opts: ["Comportamento e interação da página", "Estilo visual (cores, fontes, layout)", "Estrutura da página", "Dados estruturados em formato JSON"],
+        answer: 1
+      },
+      {
+        q: "Qual lei brasileira regulamenta os Direitos Autorais e a Propriedade Intelectual?",
+        opts: ["Lei nº 8.078/90 — Código de Defesa do Consumidor", "Lei nº 12.965/2014 — Marco Civil da Internet", "Lei nº 9.610/98 — Lei de Direitos Autorais", "Lei nº 13.709/18 — LGPD"],
+        answer: 2
+      },
+      {
+        q: "O que é o Marco Civil da Internet (Lei nº 12.965/2014)?",
+        opts: [
+          "Uma lei que proíbe o uso de redes sociais por menores de 18 anos",
+          "A lei que estabelece princípios, garantias, direitos e deveres para o uso da internet no Brasil",
+          "Um regulamento técnico para instalação de infraestrutura de telecomunicações",
+          "Uma lei que regulamenta o comércio eletrônico no Brasil"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual é a principal característica da licença MIT?",
+        opts: [
+          "Trabalhos derivados também devem obrigatoriamente ser licenciados como MIT",
+          "Proíbe o uso comercial do software",
+          "Permite uso comercial, modificação, distribuição e uso privado, exigindo apenas manter o aviso de copyright original",
+          "É exclusiva para projetos open-source sem fins lucrativos"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual arquivo representa dados estruturados, muito utilizado em APIs web?",
+        opts: [".zip", ".png", ".json", ".pdf"],
+        answer: 2
+      },
+      {
+        q: "Por quanto tempo os provedores devem guardar logs de conexão segundo o Marco Civil da Internet?",
+        opts: ["3 meses", "6 meses a 1 ano", "2 anos", "5 anos"],
+        answer: 1
+      },
+      {
+        q: "Segundo a aula, qual é a forma CORRETA de usar imagens de terceiros em projetos sem violar direitos autorais?",
+        opts: [
+          "Usar qualquer imagem encontrada no Google, pois ela já é pública",
+          "Usar bancos de imagens gratuitos (como Unsplash e Pexels), citando sempre a fonte",
+          "Baixar imagens de redes sociais, desde que o perfil seja público",
+          "Usar qualquer imagem enquanto o projeto não tiver fins comerciais"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual das licenças a seguir EXIGE que trabalhos derivados também sejam distribuídos sob a mesma licença?",
+        opts: ["MIT", "Creative Commons (CC)", "GPL — GNU General Public License", "BSD License"],
+        answer: 2
+      }
+    ]
+  },
+
+  // ══ AULA 03 ══
+  {
+    section: 2,
+    questions: [
+      {
+        q: "Qual é a definição de Gestão de Projetos apresentada na aula?",
+        opts: [
+          "O processo de criação de interfaces visuais para aplicativos mobile",
+          "A aplicação de conhecimentos, habilidades e técnicas para conduzir um conjunto de tarefas com começo, meio e fim, atingindo objetivos dentro de prazos e recursos definidos",
+          "A metodologia usada exclusivamente por grandes empresas de tecnologia para gerenciar equipes",
+          "Um sistema de controle de versão distribuído para projetos colaborativos"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual metodologia de desenvolvimento é descrita como 'sequencial — cada fase só começa quando a anterior termina'?",
+        opts: ["Scrum", "Kanban", "Agile (Ágil)", "Waterfall (Cascata)"],
+        answer: 3
+      },
+      {
+        q: "Qual é a principal característica da metodologia Ágil (Agile)?",
+        opts: [
+          "Escopo fechado e bem definido, sem possibilidade de mudanças",
+          "Documentação extensa antes de qualquer implementação",
+          "Entregas em ciclos curtos (sprints), adaptável a mudanças e com comunicação intensa com o cliente",
+          "Indicada apenas para projetos de pequeno porte com até 3 desenvolvedores"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual ferramenta de gestão de projetos foi RECOMENDADA na aula para os alunos iniciantes?",
+        opts: ["Jira", "GitHub Projects", "Notion", "Trello"],
+        answer: 3
+      },
+      {
+        q: "O que é Controle de Versão?",
+        opts: [
+          "Um sistema de backup automático que salva cópias de arquivos na nuvem a cada hora",
+          "Um sistema que registra cada mudança em arquivos ao longo do tempo, permitindo voltar a versões anteriores e trabalhar em paralelo",
+          "Uma metodologia de testes de software para garantir a qualidade do código",
+          "Um protocolo de comunicação entre servidores e clientes web"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual comando Git inicia o controle de versão em uma pasta?",
+        opts: ["git start", "git create", "git init", "git new"],
+        answer: 2
+      },
+      {
+        q: "Qual comando Git salva uma versão (snapshot) do projeto com uma mensagem descritiva?",
+        opts: ["git save -m 'mensagem'", "git commit -m 'mensagem'", "git push -m 'mensagem'", "git add -m 'mensagem'"],
+        answer: 1
+      },
+      {
+        q: "Qual comando Git é usado para ENVIAR os commits locais para o repositório remoto no GitHub?",
+        opts: ["git pull origin main", "git fetch origin main", "git sync origin main", "git push origin main"],
+        answer: 3
+      },
+      {
+        q: "Para que serve o comando 'git status'?",
+        opts: [
+          "Mostra o histórico completo de todos os commits realizados",
+          "Cria um novo branch no repositório",
+          "Mostra o estado dos arquivos (modificados, novos ou preparados para commit)",
+          "Verifica a conexão com o repositório remoto"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual é a vantagem das BRANCHES no Git?",
+        opts: [
+          "Permitem aumentar a velocidade de processamento do computador durante o desenvolvimento",
+          "Permitem testar ideias e implementar funcionalidades sem quebrar o projeto principal",
+          "Servem para compactar o código antes de fazer o deploy",
+          "São usadas exclusivamente para criar releases oficiais do software"
+        ],
+        answer: 1
+      }
+    ]
+  },
+
+  // ══ AULA 04 ══
+  {
+    section: 3,
+    questions: [
+      {
+        q: "O que é Virtualização no contexto computacional?",
+        opts: [
+          "O processo de comprimir arquivos para economizar espaço em disco",
+          "Uma técnica de programação para criar interfaces visuais responsivas",
+          "A criação de uma versão virtual de algo (hardware, SO ou rede), permitindo rodar múltiplos ambientes isolados em uma única máquina física",
+          "Um método de criptografia para proteger dados em trânsito"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual é uma diferença fundamental entre uma Máquina Virtual (VM) e um Container Docker?",
+        opts: [
+          "A VM usa menos recursos e inicializa em segundos; o Container demora minutos",
+          "A VM inclui um sistema operacional próprio e tem tamanho em gigabytes; o Container compartilha o kernel do SO hospedeiro e tem tamanho em megabytes",
+          "O Container exige hardware dedicado; a VM pode rodar em qualquer máquina",
+          "A VM é gratuita e open-source; o Container é uma tecnologia proprietária e paga"
+        ],
+        answer: 1
+      },
+      {
+        q: "O que é uma IMAGEM (Image) no Docker?",
+        opts: [
+          "Uma captura de tela do ambiente de desenvolvimento para fins de documentação",
+          "Um container que já está em execução e respondendo a requisições",
+          "Um modelo somente leitura com todas as instruções para criar um container — como uma 'receita de bolo'",
+          "O arquivo de configuração que define variáveis de ambiente do projeto"
+        ],
+        answer: 2
+      },
+      {
+        q: "O que é um CONTAINER no Docker?",
+        opts: [
+          "O arquivo de texto com instruções para construir uma imagem personalizada",
+          "Uma instância em execução de uma imagem — você pode ter vários containers rodando a partir da mesma imagem",
+          "O repositório público onde imagens Docker são armazenadas e compartilhadas",
+          "Um tipo especial de máquina virtual com acesso a recursos de hardware"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual é a função de um DOCKERFILE?",
+        opts: [
+          "Gerenciar múltiplos containers e definir como eles se comunicam",
+          "Armazenar credenciais de acesso ao Docker Hub de forma segura",
+          "Arquivo de texto com instruções para construir uma imagem personalizada — como um script de configuração do ambiente",
+          "Registrar logs de execução dos containers em produção"
+        ],
+        answer: 2
+      },
+      {
+        q: "O que é o DOCKER HUB?",
+        opts: [
+          "A interface gráfica local para gerenciar containers no Windows",
+          "Um repositório público de imagens Docker — como o GitHub, mas para imagens",
+          "O daemon responsável por executar containers no sistema operacional",
+          "Uma ferramenta para orquestrar múltiplos containers em produção"
+        ],
+        answer: 1
+      },
+      {
+        q: "O que faz a flag '-d' no comando 'docker run -d -p 80:80 nginx'?",
+        opts: [
+          "Define o nome do container como 'detached'",
+          "Desativa o modo de segurança do container",
+          "Roda o container em modo Detached (background), sem travar o terminal",
+          "Deleta automaticamente o container após ele ser encerrado"
+        ],
+        answer: 2
+      },
+      {
+        q: "No comando 'docker run -d -p 80:80 nginx', o que significa '-p 80:80'?",
+        opts: [
+          "Define a quantidade máxima de processos simultâneos como 80",
+          "Mapeia a porta 80 do container para a porta 80 do computador hospedeiro (port mapping)",
+          "Conecta o container à rede local na faixa 80.80.x.x",
+          "Especifica que o container deve usar 80 MB de memória RAM"
+        ],
+        answer: 1
+      },
+      {
+        q: "Como verificar se o Docker está corretamente instalado no computador?",
+        opts: [
+          "Abrir o gerenciador de tarefas e verificar se o processo 'docker.exe' está ativo",
+          "Reiniciar o computador e aguardar a mensagem de confirmação do Docker",
+          "Executar o comando 'docker --version' no terminal e verificar se exibe a versão instalada",
+          "Acessar o Painel de Controle e verificar em 'Programas Instalados'"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual é a principal vantagem do Docker em relação a instalar as ferramentas diretamente no computador?",
+        opts: [
+          "O Docker aumenta a velocidade de processamento do computador em até 10x",
+          "O Docker elimina a necessidade de aprender comandos de terminal",
+          "O Docker garante portabilidade e isolamento do ambiente, evitando conflitos de versão e facilitando o onboarding de novos desenvolvedores",
+          "O Docker permite programar sem conexão com a internet"
+        ],
+        answer: 2
+      }
+    ]
+  }
+];
+
+// ── State ──
+const state = { answers: [{}, {}, {}, {}], checked: [false, false, false, false] };
+
+// ── Render questions ──
+function renderAll() {
+  DATA.forEach(({ section, questions }) => {
+    const container = document.getElementById(`questions-${section}`);
+    container.innerHTML = '';
+    questions.forEach((q, qi) => {
+      const letters = ['A','B','C','D'];
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.id = `card-${section}-${qi}`;
+      card.innerHTML = `
+        <div class="q-header">
+          <div class="q-number">${qi + 1}</div>
+          <div class="q-text">${q.q}</div>
+        </div>
+        <div class="options" id="opts-${section}-${qi}">
+          ${q.opts.map((o, oi) => `
+            <div class="option" id="opt-${section}-${qi}-${oi}" onclick="selectOption(${section}, ${qi}, ${oi})">
+              <div class="option-letter">${letters[oi]}</div>
+              <span>${o}</span>
+            </div>
+          `).join('')}
+        </div>
+        <div class="feedback-msg" id="fb-${section}-${qi}"></div>
+      `;
+      container.appendChild(card);
+    });
+  });
+  renderGabarito();
+}
+
+function selectOption(sec, qi, oi) {
+  if (state.checked[sec]) return;
+  state.answers[sec][qi] = oi;
+  // Update UI
+  const opts = document.getElementById(`opts-${sec}-${qi}`).querySelectorAll('.option');
+  opts.forEach((el, idx) => {
+    el.classList.toggle('selected', idx === oi);
+  });
+  updateProgress(sec);
+}
+
+function updateProgress(sec) {
+  const answered = Object.keys(state.answers[sec]).length;
+  const pct = (answered / 10) * 100;
+  document.getElementById(`prog-${sec}`).style.width = pct + '%';
+}
+
+function checkSection(sec) {
+  if (state.checked[sec]) return;
+  let score = 0;
+  const questions = DATA[sec].questions;
+  questions.forEach((q, qi) => {
+    const chosen = state.answers[sec][qi];
+    const fb = document.getElementById(`fb-${sec}-${qi}`);
+    if (chosen === undefined) {
+      // not answered
+      const opts = document.getElementById(`opts-${sec}-${qi}`).querySelectorAll('.option');
+      opts[q.answer].classList.add('correct');
+      fb.className = 'feedback-msg show err';
+      fb.innerHTML = '⚠️ Não respondida. A alternativa correta está destacada em verde.';
+      return;
+    }
+    const opts = document.getElementById(`opts-${sec}-${qi}`).querySelectorAll('.option');
+    if (chosen === q.answer) {
+      opts[chosen].classList.remove('selected');
+      opts[chosen].classList.add('correct');
+      fb.className = 'feedback-msg show ok';
+      fb.innerHTML = '✅ Correto!';
+      score++;
+    } else {
+      opts[chosen].classList.remove('selected');
+      opts[chosen].classList.add('wrong');
+      opts[q.answer].classList.add('correct');
+      fb.className = 'feedback-msg show err';
+      fb.innerHTML = `❌ Incorreto. A resposta correta é a alternativa <strong>${['A','B','C','D'][q.answer]}</strong>.`;
+    }
+  });
+  state.checked[sec] = true;
+  document.getElementById(`scoreVal-${sec}`).innerHTML = `${score} <span>/ 10</span>`;
+  document.getElementById(`prog-${sec}`).style.width = '100%';
+}
+
+function resetSection(sec) {
+  state.answers[sec] = {};
+  state.checked[sec] = false;
+  document.getElementById(`scoreVal-${sec}`).innerHTML = `— <span>/ 10</span>`;
+  document.getElementById(`prog-${sec}`).style.width = '0%';
+  DATA[sec].questions.forEach((_, qi) => {
+    const opts = document.getElementById(`opts-${sec}-${qi}`).querySelectorAll('.option');
+    opts.forEach(o => { o.classList.remove('selected','correct','wrong'); });
+    const fb = document.getElementById(`fb-${sec}-${qi}`);
+    fb.className = 'feedback-msg';
+    fb.innerHTML = '';
+  });
+}
+
+// ── Tabs ──
+function showTab(idx) {
+  document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active', i === idx));
+  document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+}
+
+// ── Gabarito for guide tab ──
+function renderGabarito() {
+  const container = document.getElementById('gabarito-list');
+  const labels = ['Aula 01 — Iniciação à TI','Aula 02 — Arquivos & Ética','Aula 03 — Git & Projetos','Aula 04 — Docker'];
+  const letters = ['A','B','C','D'];
+  container.innerHTML = DATA.map(({ section, questions }) => `
+    <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow:hidden">
+      <div style="background:var(--blue-deep);color:white;padding:14px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px">
+        ${labels[section]}
+      </div>
+      <div style="padding:18px 20px">
+        ${questions.map((q, qi) => `
+          <div style="display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);${qi===questions.length-1?'border-bottom:none':''}">
+            <span style="flex-shrink:0;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:var(--text-light);min-width:24px">Q${qi+1}</span>
+            <div style="flex:1">
+              <div style="font-size:13px;margin-bottom:6px;line-height:1.4">${q.q}</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px">
+                ${q.opts.map((o, oi) => `
+                  <span style="padding:4px 10px;border-radius:6px;font-size:11.5px;border:1px solid;
+                    ${oi===q.answer ? 'background:rgba(0,201,167,0.1);border-color:rgba(0,201,167,0.4);color:#007A63;font-weight:600' : 'background:var(--bg);border-color:var(--border);color:var(--text-light)'}">
+                    <strong>${letters[oi]}.</strong> ${o}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+renderAll();
+</script>
+</body>
+</html>
