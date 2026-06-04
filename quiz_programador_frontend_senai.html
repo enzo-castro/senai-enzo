@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Questionário — Programador Front-End | SENAI</title>
+<title>Questionário — Ciências Humanas | SENAI</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
@@ -472,7 +472,7 @@
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="5" fill="#F4C430"/></svg>
       <span>SENAI · FIRJAN</span> &nbsp;|&nbsp; Avaliação
     </div>
-    <h1>Programador <em>Front-End</em><br>Módulo Básico</h1>
+    <h1>Ciencias <em>Humanas</em><br>Concurso</h1>
     <p class="header-sub">Questionário de múltipla escolha com 10 questões por aula — desenvolvido para avaliação dos alunos do curso QUA0300-01.</p>
     <div class="header-meta">
       <div class="meta-chip">
@@ -497,9 +497,9 @@
 
 <div class="tabs-bar">
   <div class="tabs-inner">
-    <button class="tab-btn active" onclick="showTab(0)">🖥️ Aula 01 — html <span class="tab-num">10</span></button>
-    <button class="tab-btn" onclick="showTab(1)">📁 Aula 02 — css<span class="tab-num">10</span></button>
-    <button class="tab-btn" onclick="showTab(2)">🔀 Aula 03 — java script <span class="tab-num">10</span></button>
+    <button class="tab-btn active" onclick="showTab(0)">🪧 Aula 01 — português <span class="tab-num">10</span></button>
+    <button class="tab-btn" onclick="showTab(1)">🗺️ Aula 02 — geografia <span class="tab-num">10</span></button>
+    <button class="tab-btn" onclick="showTab(2)">📖 Aula 03 — literatura <span class="tab-num">10</span></button>
     <button class="tab-btn" style="display:none" onclick="showTab(3)">🐳 Aula 04 — Docker <span class="tab-num">10</span></button>
     <button class="tab-btn" style="display:none" onclick="showTab(4)">📋 Guia Google Forms</button>
   </div>
@@ -631,84 +631,104 @@ const DATA = [
     section: 0,
     questions: [
       {
-        q: "O que significa HTML?",
+        q: "Assinale a alternativa em que a concordância verbal está de acordo com a norma-padrão.",
         opts: [
-          "Hyper Text Markup Language",
-          "High Text Machine Language",
-          "Hyper Transfer Markup Language",
-          "Home Tool Markup Language"
+            "Fazem cinco anos que o projeto foi iniciado.",
+            "Haviam muitas reclamações sobre o serviço.",
+            "Devem existir alternativas para o problema.",
+            "Existe muitos candidatos aptos à vaga."
+        ],
+        answer: 2
+      },
+      {
+        q: "Assinale a alternativa em que o emprego da crase está correto.",
+        opts: [
+            "O diretor dirigiu-se à Vossa Excelência.",
+            "Entreguei o documento à ela.",
+            "A reunião ocorrerá das 8h às 10h.",
+            "Chegamos à Brasília ontem."
+        ],
+        answer: 2
+      },
+      {
+        q: "Em qual alternativa o pronome relativo foi empregado corretamente?",
+        opts: [
+          "Conheci a pessoa que o irmão foi aprovado.",
+          "Conheci a pessoa cujo irmão foi aprovado.",
+          "Conheci a pessoa cujo o irmão foi aprovado.",
+          "Conheci a pessoa a qual irmão foi aprovado."
+        ],
+        answer: 1
+      },
+      {
+        q: "Assinale a frase em que a colocação pronominal está correta segundo a norma-padrão.",
+        opts: [
+          "Me avisaram sobre a mudança.",
+          "Não avisaram-me sobre a mudança.",
+          "Não me avisaram sobre a mudança.",
+          "Avisaram-me não sobre a mudança."
+        ],
+        answer: 2
+      },
+      {
+        q: "Em qual alternativa a pontuação está correta?",
+        opts: [
+        "Os candidatos que estudaram, foram aprovados.",
+         "Os candidatos, que estudaram foram aprovados.",
+         "Os candidatos que estudaram foram aprovados.",
+         "Os candidatos que estudaram, foram, aprovados."
+],
+        answer: 2
+      },
+      {
+        q: "Assinale a alternativa em que todas as palavras estão corretamente grafadas.",
+        opts: [
+          "Beneficiente, privilégio, exceção.",
+          "Beneficente, privilégio, exceção.",
+          "Beneficente, previlégio, exceção.",
+          "Beneficiente, previlégio, excessão."
+        ],
+        answer: 1
+      },
+      {
+        q: "Em qual alternativa a regência está correta?",
+        opts: [
+          "Assisti o espetáculo ontem.",
+          "Prefiro matemática do que português.",
+          "Obedeço aos regulamentos da instituição.",
+          "Implicou com o resultado do exame. (no sentido de acarretar)"
+        ],
+        answer: 2
+      },
+      {
+        q: "Assinale a alternativa em que há erro de concordância nominal.",
+        opts: [
+          "Seguem anexos os documentos solicitados.",
+          "É proibida a entrada de pessoas não autorizadas.",
+          "Bastantes alunos compareceram à aula.",
+          "As alunas mesmas organizaram o evento."
+        ],
+        answer: 3
+      },
+      {
+        q: "Em qual alternativa o termo destacado exerce a função de objeto indireto?",
+        opts: [
+          "Necessitamos de apoio.",
+          "Compramos livros.",
+          "Encontramos os documentos.",
+          "Visitamos o museu."
         ],
         answer: 0
       },
       {
-        q: "Qual tag é usada para criar um parágrafo?",
-        opts: ["paragraph", "p", "text", "par"],
-        answer: 1
-      },
-      {
-        q: "Qual tag cria um link?",
+        q: "Assinale a alternativa em que ocorre oração subordinada adverbial concessiva.",
         opts: [
-          "<link>",
-          "<href>",
-          "<a>",
-          "<url>"
+          "Embora estivesse cansado, continuou trabalhando.",
+          "Quando chegou, a reunião começou.",
+          "Estudou tanto que foi aprovado.",
+          "Como estava chovendo, ficou em casa."
         ],
-        answer: 2
-      },
-      {
-        q: "Quais tecnologias são utilizadas no desenvolvimento Front-End?",
-        opts: [
-          "Node.js, Python, Java e PHP",
-          "MySQL, MongoDB e PostgreSQL",
-          "HTML, CSS, JavaScript e React",
-          "Docker, Git, Linux e Apache"
-        ],
-        answer: 2
-      },
-      {
-        q: "Qual é a carga horária TOTAL do curso Programador Front-End do SENAI?",
-        opts: ["80 horas", "120 horas", "164 horas", "180 horas"],
-        answer: 3
-      },
-      {
-        q: "O que é um Sistema Operacional?",
-        opts: [
-          "Um aplicativo para criar planilhas e documentos de texto",
-          "Uma linguagem de programação usada no desenvolvimento web",
-          "O software responsável por gerenciar todos os recursos do computador e permitir que outros programas funcionem",
-          "Um hardware responsável pelo processamento de dados"
-        ],
-        answer: 2
-      },
-      {
-        q: "Qual atalho de teclado é utilizado para DESFAZER uma ação no computador?",
-        opts: ["Ctrl + C", "Ctrl + Z", "Ctrl + Y", "Ctrl + X"],
-        answer: 1
-      },
-      {
-        q: "No contexto da Matriz Curricular do curso, qual é o Módulo Básico?",
-        opts: [
-          "Desenvolvimento Web",
-          "FrontEnd Essencial",
-          "Lógica de Programação",
-          "Iniciação à Tecnologia da Informação"
-        ],
-        answer: 3
-      },
-      {
-        q: "O que é um DRIVER no contexto de software?",
-        opts: [
-          "Um aplicativo de edição de vídeo",
-          "A interface entre o sistema operacional e o hardware, permitindo que o SO controle dispositivos",
-          "Um tipo de banco de dados relacional",
-          "Um framework JavaScript para criação de interfaces"
-        ],
-        answer: 1
-      },
-      {
-        q: "Qual atalho de teclado abre o Explorador de Arquivos no Windows?",
-        opts: ["Win + D", "Win + L", "Win + E", "Alt + Tab"],
-        answer: 2
+        answer: 0
       }
     ]
   },
@@ -718,80 +738,100 @@ const DATA = [
     section: 1,
     questions: [
       {
-        q: "O que é a Estrutura Hierárquica de Diretórios?",
+        q: "Qual é o maior país do mundo em extensão territorial?",
         opts: [
-          "Um tipo de banco de dados usado para armazenar registros de usuários",
-          "A forma como o sistema operacional organiza arquivos e pastas em uma estrutura de árvore",
-          "Um método de compactação de arquivos para economizar espaço em disco",
-          "Uma linguagem de marcação para organizar conteúdo em páginas web"
+          "Canadá",
+          "China",
+          "Estados Unidos",
+          "Rússia"
         ],
-        answer: 1
+        answer: 3
       },
       {
-        q: "Qual é a função da extensão de arquivo .html?",
+        q: "Qual é a capital da Austrália?",
         opts: [
-          "Armazenar dados estruturados em formato de texto",
-          "Definir o estilo visual e o layout de uma página",
-          "Representar a estrutura de uma página web",
-          "Executar comportamentos e interações na página"
-        ],
-        answer: 2
-      },
-      {
-        q: "O que representa a extensão .css em um projeto web?",
-        opts: ["Comportamento e interação da página", "Estilo visual (cores, fontes, layout)", "Estrutura da página", "Dados estruturados em formato JSON"],
-        answer: 1
-      },
-      {
-        q: "Qual lei brasileira regulamenta os Direitos Autorais e a Propriedade Intelectual?",
-        opts: ["Lei nº 8.078/90 — Código de Defesa do Consumidor", "Lei nº 12.965/2014 — Marco Civil da Internet", "Lei nº 9.610/98 — Lei de Direitos Autorais", "Lei nº 13.709/18 — LGPD"],
-        answer: 2
-      },
-      {
-        q: "O que é o Marco Civil da Internet (Lei nº 12.965/2014)?",
-        opts: [
-          "Uma lei que proíbe o uso de redes sociais por menores de 18 anos",
-          "A lei que estabelece princípios, garantias, direitos e deveres para o uso da internet no Brasil",
-          "Um regulamento técnico para instalação de infraestrutura de telecomunicações",
-          "Uma lei que regulamenta o comércio eletrônico no Brasil"
-        ],
-        answer: 1
-      },
-      {
-        q: "Qual é a principal característica da licença MIT?",
-        opts: [
-          "Trabalhos derivados também devem obrigatoriamente ser licenciados como MIT",
-          "Proíbe o uso comercial do software",
-          "Permite uso comercial, modificação, distribuição e uso privado, exigindo apenas manter o aviso de copyright original",
-          "É exclusiva para projetos open-source sem fins lucrativos"
+          "Sydney",
+          "Melbourne",
+          "Canberra",
+          "Perth"
         ],
         answer: 2
       },
       {
-        q: "Qual arquivo representa dados estruturados, muito utilizado em APIs web?",
-        opts: [".zip", ".png", ".json", ".pdf"],
-        answer: 2
-      },
-      {
-        q: "Por quanto tempo os provedores devem guardar logs de conexão segundo o Marco Civil da Internet?",
-        opts: ["3 meses", "6 meses a 1 ano", "2 anos", "5 anos"],
-        answer: 1
-      },
-      {
-        q: "Segundo a aula, qual é a forma CORRETA de usar imagens de terceiros em projetos sem violar direitos autorais?",
-        opts: [
-          "Usar qualquer imagem encontrada no Google, pois ela já é pública",
-          "Usar bancos de imagens gratuitos (como Unsplash e Pexels), citando sempre a fonte",
-          "Baixar imagens de redes sociais, desde que o perfil seja público",
-          "Usar qualquer imagem enquanto o projeto não tiver fins comerciais"
+        q: "O rio mais extenso do mundo, segundo a maioria das medições atuais, é o:",
+        opts: [ 
+          "Rio Nilo",
+          "Rio Amazonas",
+          "Rio Yangtzé",
+          "Rio Mississippi"
         ],
         answer: 1
       },
       {
-        q: "Qual das licenças a seguir EXIGE que trabalhos derivados também sejam distribuídos sob a mesma licença?",
-        opts: ["MIT", "Creative Commons (CC)", "GPL — GNU General Public License", "BSD License"],
+        q: "Qual camada da atmosfera é responsável pela maior parte dos fenômenos meteorológicos?",
+        opts: [
+          "Estratosfera",
+          "Mesosfera",
+          "Troposfera",
+          "Termosfera"
+        ],
         answer: 2
-      }
+      },
+      {
+        q: "O Trópico de Capricórnio passa por qual região do Brasil?",
+        opts: [
+          "Norte",
+          "Nordeste",
+          "Sul e Sudeste",
+          "Centro-Oeste apenas"
+        ],
+        answer: 2
+      },
+      {
+        q: "Qual é o bioma predominante na Região Norte do Brasil?",
+        opts: [
+          "Cerrado",
+          "Caatinga",
+          "Floresta Amazônica",
+          "Mata Atlântica"
+        ],
+        answer: 2
+      },
+      {
+        q: "O movimento da Terra responsável pela sucessão dos dias e das noites é chamado de:",
+        opts: [
+          "Translação",
+          "Rotação",
+          "Precessão",
+          "Revolução"
+        ],
+        answer: 1
+      },
+      {
+        q: "Qual país possui a maior população do mundo em 2026?",
+        opts: ["China", "Índia", "Estados Unidos", "Indonésia"],
+        answer: 1
+      },
+      {
+        q: "O estreito de Gibraltar liga:",
+        opts: [
+          "O Oceano Atlântico e o Mar Mediterrâneo",
+          "O Oceano Pacífico e o Oceano Atlântico",
+          "Mar vermelho e o Oceano Índico",
+          "Mar negro e Mar Mediterrâneo"
+        ],
+        answer: 0
+      },
+      {
+        q: "Qual é a principal fonte de energia elétrica do Brasil?",
+        opts: [
+          "Nuclear",
+          "Solar",
+          "Termelétrica",
+          "Hidrelétrica"
+        ],
+        answer: 3
+      },
     ]
   },
 
