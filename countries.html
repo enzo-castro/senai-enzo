@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Países</title>
+    <style>
+        /* Estilos básicos apenas para organizar as bandeiras em grade */
+        #paises-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            font-family: sans-serif;
+        }
+        .card-pais {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            width: 150px;
+            text-align: center;
+            box-shadow: 5px 7px 9px rgba(0,0,0,0.1);
+            cursor: pointer;
+                transition: transform 0.2s;
+        }
+        .card-pais img {
+            width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+        }
+        .card-pais h3 {
+            font-size: 14px;
+            margin: 10px 0 0 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="paises-container">Carregando países...</div>
+
+    <script>
+        // 2. FUNÇÃO ASYNC AWAIT ATUALIZADA
+        async function carregarPaises() {
+            const url = 'https://restcountries.com/v3.1/all?fields=name,flags';
+            const container = document.getElementById('paises-container');
+
+            // Garante que o container existe antes de tentar mudar o innerHTML
+            if (!container) {
+                console.error("Erro: O elemento #paises-container não foi encontrado no HTML.");
+                return;
+            }
+
+            try {
+                const resposta = await fetch(url);
+                
+                if (!resposta.ok) {
+                    throw new Error(`Erro na API: ${resposta.status}`);
+                }
+
+                const paises = await resposta.json();
+
+                // Ordena os países em ordem alfabética pelo nome comum
+                paises.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+                // Mapeia os dados para gerar as tags HTML
+                const htmlGerado = paises.map(pais => {
+                    return `
+                    <a href="https://www.google.com/search?q=${encodeURIComponent(pais.name.common)}" target="_blank" style="text-decoration: none; color: inherit;">
+                        <div class="card-pais">
+                            <img src="${pais.flags.svg}" alt="Bandeira de ${pais.name.common}">
+                            <h3>${pais.name.common}</h3>
+                        </div>
+                    `;
+                }).join('');
+               
+
+                // Aplica ao innerHTML
+                container.innerHTML = htmlGerado;
+
+            } catch (erro) {
+                console.error('Erro detalhado:', erro);
+                container.innerHTML = `<p style="color: red;">Erro ao carregar dados. Verifique o console do navegador.</p>`;
+            }
+        }
+
+        // 3. ESSA LINHA GARANTE QUE A FUNÇÃO SÓ RODA QUANDO O HTML ESTIVER PRONTO
+        document.addEventListener('DOMContentLoaded', carregarPaises);
+
+    </script>
+   
+</body>
+</html>
