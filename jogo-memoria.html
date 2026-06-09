@@ -11,54 +11,50 @@
    🎨 VARIÁVEIS — ALTERE AQUI PARA MUDAR O VISUAL DO JOGO
    ============================================================ */
 :root {
-  /* Cores principais */
-  --cor-fundo:       #1c4d28;
-  --cor-painel:      #1a2772;
-  --cor-borda:       #000000;
+  /* Fundo */
+  --cor-fundo:       #0f2e1b;
+  --cor-painel:      #1c3d24;
+  --cor-borda:       #4d7a4e;
 
-  /* Carta */
-  --cor-carta-verso: #1e3a2d;
-  --cor-carta-frente:#16213e;
-  --cor-carta-borda: #3c6a3a;
-  --cor-carta-hover: #252550;
+  /* Cartas */
+  --cor-carta-verso: #295032;
+  --cor-carta-frente:#1f4428;
+  --cor-carta-borda: #5d8f5f;
+  --cor-carta-hover: #34683f;
 
   /* Estados */
-  --cor-acerto:      #00e5a0;
-  --cor-erro:        #ff4f6a;
-  --cor-destaque:    #7c6af7;
-  --cor-ouro:        #ffd700;
+  --cor-acerto:      #7dff7d;
+  --cor-erro:        #ff6b6b;
+  --cor-destaque:    #ffd166;
+  --cor-ouro:        #ffcf40;
 
   /* Textos */
-  --cor-texto:       #e8e8f0;
-  --cor-texto-dim:   #6b6b9a;
+  --cor-texto:       #f5fff5;
+  --cor-texto-dim:   #b6d6b6;
 
-  /* Tipografia */
-  --fonte-titulo:    'Syne', sans-serif;
-  --fonte-corpo:     'Space Mono', monospace;
+  /* Fontes */
+  --fonte-titulo: 'Syne', sans-serif;
+  --fonte-corpo: 'Space Mono', monospace;
 
-  /* Tamanhos */
-  --tamanho-carta:   120px;
-  --gap-grade:       13px;
-  --raio-carta:      13px;
-  --raio-painel:     10px;
+  --tamanho-carta: 100px;
+  --gap-grade: 12px;
+  --raio-carta: 14px;
+  --raio-painel: 18px;
 
-  /* Emojis das cartas — 10 pares */
-  --emoji-size:      3.0rem;
+  --emoji-size: 3.0rem;
 }
-
 /* ============================================================
    RESET & BASE
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  
   min-height: 100vh;
-  background: var(--cor-fundo);
-  background-image:
+  background:
     radial-gradient(circle at 20% 20%, #2e5d34 0%, transparent 30%),
-    radial-gradient(circle at 80% 70%, #467a3f 0%, transparent 25%);
-    
+    radial-gradient(circle at 80% 70%, #467a3f 0%, transparent 25%),
+    linear-gradient(180deg, #183b22 0%, #0f2e1b 100%);
+
   font-family: var(--fonte-corpo);
   color: var(--cor-texto);
   display: flex;
@@ -106,13 +102,16 @@ header p {
 }
 
 .stat {
-  background: var(--cor-painel);
-  border: 1px solid var(--cor-borda);
+  background: rgba(28,61,36,.9);
+  border: 1px solid #6ea86c;
   border-radius: var(--raio-painel);
-  padding: 0.7rem 1.4rem;
-  text-align: center;
-  min-width: 100px;
-  transition: transform 0.6s;
+
+  backdrop-filter: blur(8px);
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.3);
+
+  padding: 0.8rem 1.5rem;
 }
 
 .stat:hover { transform: translateY(-2px); }
@@ -175,33 +174,38 @@ header p {
 /* Faces */
 .carta-frente,
 .carta-verso {
+   background:
+     repeating-linear-gradient(
+      45deg,
+      #2f5a34,
+      #2f5a34 10px,
+      #37693c 10px,
+      #37693c 20px
+    );
+  color: #d7ffd7;
+  font-size: 2rem;
   position: absolute;
   inset: 0;
   border-radius: var(--raio-carta);
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--cor-carta-borda);
-  font-size: var(--emoji-size);
-  user-select: none;
+  border: 2px solid #79a66f;
 }
-
 /* Verso: o que o jogador vê antes de clicar */
 .carta-verso {
-  background: var(--cor-carta-verso);
-  background-image:
+  background:
     repeating-linear-gradient(
       45deg,
-      transparent,
-      transparent 6px,
-      #ffffff05 6px,
-      #ffffff05 7px
+      #2f5a34,
+      #2f5a34 10px,
+      #37693c 10px,
+      #37693c 20px
     );
-  font-size: 1.6rem;
-  color: var(--cor-texto-dim);
-  transition: background 0.2s, border-color 0.2s;
+
+  font-size: 2rem;
+  color: #d7ffd7;
 }
 
 .carta:not(.virada):not(.acertada):hover .carta-verso {
@@ -221,9 +225,19 @@ header p {
 
 /* Estado acertado */
 .carta.acertada .carta-frente {
-  border-color: var(--cor-acerto);
-  background: #001a0e;
-  box-shadow: 0 0 18px #00e5a040, inset 0 0 30px #00e5a008;
+  border-color: #9fff9f;
+
+  background:
+    linear-gradient(
+      135deg,
+      #295a2f,
+      #1f4428
+    );
+
+  box-shadow:
+    0 0 15px #7dff7d,
+    0 0 30px rgba(125,255,125,.4);
+
   animation: brilharAcerto 0.5s ease;
 }
 
@@ -503,7 +517,7 @@ function iniciarJogo() {
     carta.innerHTML = `
       <div class="carta-inner">
         <div class="carta-verso">
-          <span class="icone-verso">✦</span>
+          <span class="icone-verso">🌿</span>
         </div>
         <div class="carta-frente" aria-hidden="true">
           ${emoji}
