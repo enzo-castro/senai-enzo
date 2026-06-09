@@ -283,6 +283,34 @@ header p {
 .vitoria p { font-size: 0.8rem; color: var(--cor-texto-dim); }
 
 /* ============================================================
+   MENSAGEM DE DERROTA
+   ============================================================ */
+.derrota {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--cor-painel);
+  border: 2px solid var(--cor-erro);
+  border-radius: var(--raio-painel);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  animation: escalar 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.derrota.visivel { display: flex; }
+
+.derrota-emoji { font-size: 3.5rem; animation: balançar 0.8s ease-in-out infinite; }
+
+.derrota h2 {
+  font-family: var(--fonte-titulo);
+  font-size: 1.8rem;
+  color: var(--cor-erro);
+}
+
+.derrota p { font-size: 0.8rem; color: var(--cor-texto-dim); }
+
+/* ============================================================
    BOTÃO
    ============================================================ */
 button {
@@ -369,6 +397,17 @@ button:active { transform: translateY(0); opacity: 0.85; }
   100% { transform: scale(1); }
 }
 
+@keyframes pulsarAviso {
+  0%, 100% { 
+    transform: scale(1);
+    text-shadow: 0 0 10px transparent;
+  }
+  50% { 
+    transform: scale(1.1);
+    text-shadow: 0 0 15px #ff4f6a;
+  }
+}
+
 @keyframes shake {
   0%, 100% { transform: rotateY(180deg) translateX(0); }
   20%       { transform: rotateY(180deg) translateX(-6px); }
@@ -396,6 +435,11 @@ button:active { transform: translateY(0); opacity: 0.85; }
 @keyframes flutuar {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-8px); }
+}
+
+@keyframes balançar {
+  0%, 100% { transform: rotate(-5deg); }
+  50%       { transform: rotate(5deg); }
 }
 
 /* ============================================================
@@ -427,7 +471,7 @@ button:active { transform: translateY(0); opacity: 0.85; }
     <div class="stat-label">Acertos</div>
   </div>
   <div class="stat">
-    <div class="stat-valor" id="tempo">0s</div>
+    <div class="stat-valor" id="tempo">5:00</div>
     <div class="stat-label">Tempo</div>
   </div>
 </div>
@@ -447,12 +491,19 @@ button:active { transform: translateY(0); opacity: 0.85; }
   <p id="msg-vitoria">Você completou o jogo!</p>
 </div>
 
+<!-- MENSAGEM DE DERROTA -->
+<div class="derrota" id="derrota" role="alert" aria-live="polite">
+  <div class="derrota-emoji">⏰</div>
+  <h2>Tempo Esgotado!</h2>
+  <p id="msg-derrota">Tente novamente!</p>
+</div>
+
 <!-- BOTÃO -->
 <button id="btn-reiniciar" onclick="iniciarJogo()">↺ Novo Jogo</button>
 
 <!-- DICA PARA ALUNOS -->
 <p class="dica">
-  Dica: edite as variáveis <code>:root</code> no CSS para mudar o visual!
+  ⏱️ Você tem <code>1:30 minutos</code> para encontrar todos os pares!
 </p>
 
 <script>
@@ -462,7 +513,17 @@ button:active { transform: translateY(0); opacity: 0.85; }
 const EMOJIS = ['🦆', '🐮', '🐨', '🐰', '🐼', '🦁', '🐯', '🦉', '🐸', '🐵'];
 // Dica: troque por outros emojis ou use letras, números, etc.
 
-const TOTAL_PARES = EMOJIS.length; // 10 pares = 20 cartas
+const TOTAL_PARES = EMOJIS.length; // 8 pares = 16 cartas
+const TEMPO_LIMITE = 90; // Tempo limite em segundos (1:30 minutos) — altere conforme desejar
+
+// ============================================================
+// 🔊 SONS
+// ============================================================
+const somClique  = new Audio("sons/clique.mp3");
+const somAcerto  = new Audio("sons/acerto.mp3");
+const somErro    = new Audio("sons/erro.mp3");
+const somVitoria = new Audio("sons/vitoria.mp3");
+const somDerrota = new Audio("sons/derrota.mp3");
 
 // ============================================================
 //  ESTADO DO JOGO
@@ -471,9 +532,8 @@ let cartasViradas  = [];   // cartas atualmente viradas (max 2)
 let acertos        = 0;    // pares encontrados
 let tentativas     = 0;    // total de tentativas
 let bloqueado      = false;// impede clique durante animação
-let inicio         = null; // timestamp de início
+let tempoRestante  = TEMPO_LIMITE; // tempo restante em segundos
 let timerID        = null; // ID do setInterval do cronômetro
-let tempoDefinido  = 120;
 
 // ============================================================
 //  INICIALIZAR / REINICIAR JOGO
@@ -484,18 +544,19 @@ function iniciarJogo() {
   acertos       = 0;
   tentativas    = 0;
   bloqueado     = false;
-  tempoDefinido = 120;
+  tempoRestante = TEMPO_LIMITE;
 
   // Resetar UI
   document.getElementById('tentativas').textContent = '0';
   document.getElementById('acertos').textContent    = '0';
-  document.getElementById('tempo').textContent      = '120';
+  document.getElementById('tempo').textContent      = formatarTempo(TEMPO_LIMITE);
+  document.getElementById('tempo').classList.remove('aviso');
   document.getElementById('progresso').style.width  = '0%';
   document.getElementById('vitoria').classList.remove('visivel');
+  document.getElementById('derrota').classList.remove('visivel');
 
   // Parar cronômetro anterior
   clearInterval(timerID);
-  inicio  = Date.now();
   timerID = setInterval(atualizarTempo, 1000);
 
   // Criar e embaralhar cartas
@@ -517,7 +578,7 @@ function iniciarJogo() {
     carta.innerHTML = `
       <div class="carta-inner">
         <div class="carta-verso">
-          <span class="icone-verso">🌿</span>
+          <span class="icone-verso">🐾</span>
         </div>
         <div class="carta-frente" aria-hidden="true">
           ${emoji}
@@ -542,6 +603,8 @@ function clicarCarta(carta) {
 
   // Virar a carta
   carta.classList.add('virada');
+  somClique.currentTime = 0;
+somClique.play();
   carta.setAttribute('aria-label', `Carta: ${carta.dataset.emoji}`);
   cartasViradas.push(carta);
 
@@ -556,12 +619,14 @@ function clicarCarta(carta) {
   const [c1, c2] = cartasViradas;
 
   if (c1.dataset.emoji === c2.dataset.emoji) {
+    somAcerto.currentTime = 0;
+somAcerto.play();
     // ✅ PAR ENCONTRADO
     setTimeout(() => {
       c1.classList.add('acertada');
       c2.classList.add('acertada');
-      c1.classList.remove('virado');
-      c2.classList.remove('virado');
+      c1.classList.remove('virada');
+      c2.classList.remove('virada');
       c1.setAttribute('aria-label', `Par encontrado: ${c1.dataset.emoji}`);
       c2.setAttribute('aria-label', `Par encontrado: ${c2.dataset.emoji}`);
       cartasViradas = [];
@@ -575,6 +640,8 @@ function clicarCarta(carta) {
     }, 400);
 
   } else {
+    somErro.currentTime = 0;
+somErro.play();
     // ❌ NÃO É PAR
     c1.classList.add('errado');
     c2.classList.add('errado');
@@ -594,15 +661,31 @@ function clicarCarta(carta) {
 //  VITÓRIA
 // ============================================================
 function exibirVitoria() {
+  somVitoria.play();
   clearInterval(timerID);
-  const segundos = Math.round((Date.now() - inicio) / 1000);
   const eficiencia = Math.round((TOTAL_PARES / tentativas) * 100);
 
   document.getElementById('msg-vitoria').textContent =
-    `${tentativas} tentativas · ${segundos}s · ${eficiencia}% de eficiência`;
+    `${tentativas} tentativas · ${formatarTempo(TEMPO_LIMITE - tempoRestante)} · ${eficiencia}% de eficiência`;
 
   setTimeout(() => {
     document.getElementById('vitoria').classList.add('visivel');
+  }, 300);
+}
+
+// ============================================================
+//  DERROTA (TEMPO ESGOTADO)
+// ============================================================
+function exibirDerrota() {
+  somDerrota.play();
+  clearInterval(timerID);
+  bloqueado = true;
+
+  document.getElementById('msg-derrota').textContent =
+    `Tempo esgotado! Você encontrou ${acertos}/${TOTAL_PARES} pares em ${tentativas} tentativas.`;
+
+  setTimeout(() => {
+    document.getElementById('derrota').classList.add('visivel');
   }, 300);
 }
 
@@ -627,26 +710,31 @@ function atualizarStat(id, valor) {
   el.classList.add('pulsar');
 }
 
-/*function atualizarTempo() {
-  const s = Math.round((Date.now() - inicio) / 1000);
-  document.getElementById('tempo').textContent = `${s}s`;
-} */
+function formatarTempo(segundos) {
+  const min = Math.floor(segundos / 60);
+  const seg = segundos % 60;
+  return `${min}:${seg.toString().padStart(2, '0')}`;
+}
 
 function atualizarTempo() {
-  // 1. Calcula quantos segundos se passaram
-  const s = Math.round((Date.now() - inicio) / 1000);
-  
-  // 2. Subtrai os segundos passados do tempo total
-  let restantes = tempoDefinido - s;
-  
-  // 3. Garante que o contador não fique negativo quando chegar a 0
-  if (restantes < 120){
-    restantes = restantes -1;
-    // Opcional: limpar o setInterval aqui para parar de executar
+  tempoRestante--;
+
+  // Atualizar display
+  const display = document.getElementById('tempo');
+  display.textContent = formatarTempo(tempoRestante);
+
+  // Efeito visual quando tempo está acabando
+  if (tempoRestante <= 10) {
+    display.classList.add('aviso');
+  } else {
+    display.classList.remove('aviso');
   }
-  
-  // 4. Atualiza a tela
-  document.getElementById('tempo').textContent = `${s}s`;
+
+  // Verificar se acabou o tempo
+  if (tempoRestante <= 0) {
+    clearInterval(timerID);
+    exibirDerrota();
+  }
 }
 
 function atualizarProgresso(pct) {
