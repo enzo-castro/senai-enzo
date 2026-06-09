@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo da Memória — SENAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   🎨 VARIÁVEIS — ALTERE AQUI PARA MUDAR O VISUAL DO JOGO
+   ============================================================ */
+:root {
+  /* Cores principais */
+  --cor-fundo:       #1c4d28;
+  --cor-painel:      #1a2772;
+  --cor-borda:       #000000;
+
+  /* Carta */
+  --cor-carta-verso: #1e3a2d;
+  --cor-carta-frente:#16213e;
+  --cor-carta-borda: #3c6a3a;
+  --cor-carta-hover: #252550;
+
+  /* Estados */
+  --cor-acerto:      #00e5a0;
+  --cor-erro:        #ff4f6a;
+  --cor-destaque:    #7c6af7;
+  --cor-ouro:        #ffd700;
+
+  /* Textos */
+  --cor-texto:       #e8e8f0;
+  --cor-texto-dim:   #6b6b9a;
+
+  /* Tipografia */
+  --fonte-titulo:    'Syne', sans-serif;
+  --fonte-corpo:     'Space Mono', monospace;
+
+  /* Tamanhos */
+  --tamanho-carta:   120px;
+  --gap-grade:       13px;
+  --raio-carta:      13px;
+  --raio-painel:     10px;
+
+  /* Emojis das cartas — 10 pares */
+  --emoji-size:      3.0rem;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  
+  min-height: 100vh;
+  background: var(--cor-fundo);
+  background-image:
+    radial-gradient(circle at 20% 20%, #2e5d34 0%, transparent 30%),
+    radial-gradient(circle at 80% 70%, #467a3f 0%, transparent 25%);
+    
+  font-family: var(--fonte-corpo);
+  color: var(--cor-texto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem 3rem;
+  gap: 1.5rem;
+}
+
+/* ============================================================
+   CABEÇALHO
+   ============================================================ */
+header {
+  text-align: center;
+  animation: fadeDown 0.9s ease both;
+}
+
+header h1 {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, var(--cor-destaque), var(--cor-acerto));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+header p {
+  font-size: 0.78rem;
+  color: var(--cor-texto-dim);
+  margin-top: 4px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   PLACAR
+   ============================================================ */
+.placar {
+  
+  display: flex;
+  gap: 1rem;
+  animation: fadeDown 0.5s 0.1s ease both;
+}
+
+.stat {
+  background: var(--cor-painel);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-painel);
+  padding: 0.7rem 1.4rem;
+  text-align: center;
+  min-width: 100px;
+  transition: transform 0.6s;
+}
+
+.stat:hover { transform: translateY(-2px); }
+
+.stat-valor {
+  font-family: var(--fonte-titulo);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--cor-destaque);
+  line-height: 1;
+}
+
+.stat-valor.pulsar { animation: pulsar 0.4s ease; }
+
+.stat-label {
+  font-size: 0.65rem;
+  color: var(--cor-texto-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ============================================================
+   GRADE DE CARTAS
+   ============================================================ */
+.grade {
+  display: grid;
+  grid-template-columns: repeat(4, var(--tamanho-carta));
+  gap: var(--gap-grade);
+  animation: fadeUp 1.0s 0.2s ease both;
+}
+
+/* ============================================================
+   CARTA — PERSPECTIVA 3D
+   ============================================================ */
+.carta {
+  width: var(--tamanho-carta);
+  height: var(--tamanho-carta);
+  cursor: pointer;
+  perspective: 600px;
+  animation: entrar 0.5s ease both;
+}
+
+/* atraso escalonado por índice (definido via JS) */
+
+.carta-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--raio-carta);
+}
+
+.carta.virada .carta-inner,
+.carta.acertada .carta-inner {
+  transform: rotateY(180deg);
+}
+
+/* Faces */
+.carta-frente,
+.carta-verso {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--raio-carta);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--cor-carta-borda);
+  font-size: var(--emoji-size);
+  user-select: none;
+}
+
+/* Verso: o que o jogador vê antes de clicar */
+.carta-verso {
+  background: var(--cor-carta-verso);
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 6px,
+      #ffffff05 6px,
+      #ffffff05 7px
+    );
+  font-size: 1.6rem;
+  color: var(--cor-texto-dim);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.carta:not(.virada):not(.acertada):hover .carta-verso {
+  background: var(--cor-carta-hover);
+  border-color: var(--cor-destaque);
+}
+
+.carta:not(.virada):not(.acertada):hover .carta-verso .icone-verso {
+  animation: girar 0.5s ease;
+}
+
+/* Frente: emoji revelado */
+.carta-frente {
+  background: var(--cor-carta-frente);
+  transform: rotateY(180deg);
+}
+
+/* Estado acertado */
+.carta.acertada .carta-frente {
+  border-color: var(--cor-acerto);
+  background: #001a0e;
+  box-shadow: 0 0 18px #00e5a040, inset 0 0 30px #00e5a008;
+  animation: brilharAcerto 0.5s ease;
+}
+
+/* Estado errado */
+.carta.errado .carta-inner {
+  animation: shake 0.5s ease;
+}
+
+.carta.errado .carta-frente {
+  border-color: var(--cor-erro);
+  background: #1a0008;
+}
+
+/* ============================================================
+   MENSAGEM DE VITÓRIA
+   ============================================================ */
+.vitoria {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  background: var(--cor-painel);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-painel);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  animation: escalar 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.vitoria.visivel { display: flex; }
+
+.vitoria-emoji { font-size: 3.5rem; animation: flutuar 2s ease-in-out infinite; }
+
+.vitoria h2 {
+  font-family: var(--fonte-titulo);
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--cor-ouro), var(--cor-acerto));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vitoria p { font-size: 0.8rem; color: var(--cor-texto-dim); }
+
+/* ============================================================
+   BOTÃO
+   ============================================================ */
+button {
+  font-family: var(--fonte-corpo);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--cor-fundo);
+  background: linear-gradient(135deg, var(--cor-destaque), var(--cor-acerto));
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 20px #7c6af740;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px #7c6af760;
+}
+
+button:active { transform: translateY(0); opacity: 0.85; }
+
+/* ============================================================
+   BARRA DE PROGRESSO
+   ============================================================ */
+.progresso-wrap {
+  width: min(440px, 90vw);
+  height: 4px;
+  background: var(--cor-borda);
+  border-radius: 4px;
+  overflow: hidden;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+.progresso-barra {
+  height: 100%;
+  background: linear-gradient(90deg, var(--cor-destaque), var(--cor-acerto));
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+/* ============================================================
+   RODAPÉ DICA
+   ============================================================ */
+.dica {
+  font-size: 0.68rem;
+  color: var(--cor-texto-dim);
+  letter-spacing: 1px;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+
+.dica code {
+  color: var(--cor-destaque);
+  background: #7c6af715;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   ANIMAÇÕES
+   ============================================================ */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes entrar {
+  from { opacity: 0; transform: scale(0.6) rotateY(-30deg); }
+  to   { opacity: 1; transform: scale(1) rotateY(0); }
+}
+
+@keyframes pulsar {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  20%       { transform: rotateY(180deg) translateX(-6px); }
+  40%       { transform: rotateY(180deg) translateX(6px); }
+  60%       { transform: rotateY(180deg) translateX(-4px); }
+  80%       { transform: rotateY(180deg) translateX(4px); }
+}
+
+@keyframes brilharAcerto {
+  0%   { box-shadow: 0 0 0 0 #00e5a060; }
+  60%  { box-shadow: 0 0 24px 8px #00e5a040; }
+  100% { box-shadow: 0 0 18px #00e5a040; }
+}
+
+@keyframes girar {
+  from { transform: rotate(0); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes escalar {
+  from { opacity: 0; transform: scale(0.7); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes flutuar {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+@media (max-width: 480px) {
+  :root {
+    --tamanho-carta: 72px;
+    --gap-grade: 8px;
+    --emoji-size: 1.8rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>O zoológico do senai</h1>
+</header>
+
+<!-- PLACAR -->
+<div class="placar">
+  <div class="stat">
+    <div class="stat-valor" id="tentativas">0</div>
+    <div class="stat-label">Tentativas</div>
+  </div>
+  <div class="stat">
+    <div class="stat-valor" id="acertos">0</div>
+    <div class="stat-label">Acertos</div>
+  </div>
+  <div class="stat">
+    <div class="stat-valor" id="tempo">0s</div>
+    <div class="stat-label">Tempo</div>
+  </div>
+</div>
+
+<!-- BARRA DE PROGRESSO -->
+<div class="progresso-wrap">
+  <div class="progresso-barra" id="progresso"></div>
+</div>
+
+<!-- GRADE DE CARTAS -->
+<div class="grade" id="grade" role="list" aria-label="Grade de cartas do jogo da memória"></div>
+
+<!-- MENSAGEM DE VITÓRIA -->
+<div class="vitoria" id="vitoria" role="alert" aria-live="polite">
+  <div class="vitoria-emoji">🏆</div>
+  <h2>Parabéns!</h2>
+  <p id="msg-vitoria">Você completou o jogo!</p>
+</div>
+
+<!-- BOTÃO -->
+<button id="btn-reiniciar" onclick="iniciarJogo()">↺ Novo Jogo</button>
+
+<!-- DICA PARA ALUNOS -->
+<p class="dica">
+  Dica: edite as variáveis <code>:root</code> no CSS para mudar o visual!
+</p>
+
+<script>
+// ============================================================
+//  🎮 CONFIGURAÇÕES — altere aqui para personalizar
+// ============================================================
+const EMOJIS = ['🦆', '🐮', '🐨', '🐰', '🐼', '🦁', '🐯', '🦉', '🐸', '🐵'];
+// Dica: troque por outros emojis ou use letras, números, etc.
+
+const TOTAL_PARES = EMOJIS.length; // 10 pares = 20 cartas
+
+// ============================================================
+//  ESTADO DO JOGO
+// ============================================================
+let cartasViradas  = [];   // cartas atualmente viradas (max 2)
+let acertos        = 0;    // pares encontrados
+let tentativas     = 0;    // total de tentativas
+let bloqueado      = false;// impede clique durante animação
+let inicio         = null; // timestamp de início
+let timerID        = null; // ID do setInterval do cronômetro
+let tempoDefinido  = 120;
+
+// ============================================================
+//  INICIALIZAR / REINICIAR JOGO
+// ============================================================
+function iniciarJogo() {
+  // Resetar estado
+  cartasViradas = [];
+  acertos       = 0;
+  tentativas    = 0;
+  bloqueado     = false;
+  tempoDefinido = 120;
+
+  // Resetar UI
+  document.getElementById('tentativas').textContent = '0';
+  document.getElementById('acertos').textContent    = '0';
+  document.getElementById('tempo').textContent      = '120';
+  document.getElementById('progresso').style.width  = '0%';
+  document.getElementById('vitoria').classList.remove('visivel');
+
+  // Parar cronômetro anterior
+  clearInterval(timerID);
+  inicio  = Date.now();
+  timerID = setInterval(atualizarTempo, 1000);
+
+  // Criar e embaralhar cartas
+  const pares    = [...EMOJIS, ...EMOJIS];
+  const embaralhadas = embaralhar(pares);
+
+  // Renderizar grade
+  const grade = document.getElementById('grade');
+  grade.innerHTML = '';
+
+  embaralhadas.forEach((emoji, i) => {
+    const carta = document.createElement('div');
+    carta.className = 'carta';
+    carta.setAttribute('role', 'listitem');
+    carta.setAttribute('aria-label', 'Carta virada para baixo');
+    carta.style.animationDelay = `${i * 40}ms`;
+    carta.dataset.emoji = emoji;
+
+    carta.innerHTML = `
+      <div class="carta-inner">
+        <div class="carta-verso">
+          <span class="icone-verso">✦</span>
+        </div>
+        <div class="carta-frente" aria-hidden="true">
+          ${emoji}
+        </div>
+      </div>`;
+
+    carta.addEventListener('click', () => clicarCarta(carta));
+    grade.appendChild(carta);
+  });
+}
+
+// ============================================================
+//  LÓGICA: CLICAR NUMA CARTA
+// ============================================================
+function clicarCarta(carta) {
+  // Ignorar clique em carta já virada, acertada, ou durante animação
+  if (
+    bloqueado ||
+    carta.classList.contains('virada') ||
+    carta.classList.contains('acertada')
+  ) return;
+
+  // Virar a carta
+  carta.classList.add('virada');
+  carta.setAttribute('aria-label', `Carta: ${carta.dataset.emoji}`);
+  cartasViradas.push(carta);
+
+  // Se só uma carta virada, aguardar próxima
+  if (cartasViradas.length < 2) return;
+
+  // Duas cartas viradas: verificar par
+  bloqueado = true;
+  tentativas++;
+  atualizarStat('tentativas', tentativas);
+
+  const [c1, c2] = cartasViradas;
+
+  if (c1.dataset.emoji === c2.dataset.emoji) {
+    // ✅ PAR ENCONTRADO
+    setTimeout(() => {
+      c1.classList.add('acertada');
+      c2.classList.add('acertada');
+      c1.classList.remove('virado');
+      c2.classList.remove('virado');
+      c1.setAttribute('aria-label', `Par encontrado: ${c1.dataset.emoji}`);
+      c2.setAttribute('aria-label', `Par encontrado: ${c2.dataset.emoji}`);
+      cartasViradas = [];
+      bloqueado     = false;
+
+      acertos++;
+      atualizarStat('acertos', acertos);
+      atualizarProgresso(acertos / TOTAL_PARES * 100);
+
+      if (acertos === TOTAL_PARES) exibirVitoria();
+    }, 400);
+
+  } else {
+    // ❌ NÃO É PAR
+    c1.classList.add('errado');
+    c2.classList.add('errado');
+
+    setTimeout(() => {
+      c1.classList.remove('virada', 'errado');
+      c2.classList.remove('virada', 'errado');
+      c1.setAttribute('aria-label', 'Carta virada para baixo');
+      c2.setAttribute('aria-label', 'Carta virada para baixo');
+      cartasViradas = [];
+      bloqueado     = false;
+    }, 900);
+  }
+}
+
+// ============================================================
+//  VITÓRIA
+// ============================================================
+function exibirVitoria() {
+  clearInterval(timerID);
+  const segundos = Math.round((Date.now() - inicio) / 1000);
+  const eficiencia = Math.round((TOTAL_PARES / tentativas) * 100);
+
+  document.getElementById('msg-vitoria').textContent =
+    `${tentativas} tentativas · ${segundos}s · ${eficiencia}% de eficiência`;
+
+  setTimeout(() => {
+    document.getElementById('vitoria').classList.add('visivel');
+  }, 300);
+}
+
+// ============================================================
+//  AUXILIARES
+// ============================================================
+function embaralhar(arr) {
+  // Fisher-Yates shuffle
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function atualizarStat(id, valor) {
+  const el = document.getElementById(id);
+  el.textContent = valor;
+  el.classList.remove('pulsar');
+  void el.offsetWidth; // reflow para reiniciar animação
+  el.classList.add('pulsar');
+}
+
+/*function atualizarTempo() {
+  const s = Math.round((Date.now() - inicio) / 1000);
+  document.getElementById('tempo').textContent = `${s}s`;
+} */
+
+function atualizarTempo() {
+  // 1. Calcula quantos segundos se passaram
+  const s = Math.round((Date.now() - inicio) / 1000);
+  
+  // 2. Subtrai os segundos passados do tempo total
+  let restantes = tempoDefinido - s;
+  
+  // 3. Garante que o contador não fique negativo quando chegar a 0
+  if (restantes < 120){
+    restantes = restantes -1;
+    // Opcional: limpar o setInterval aqui para parar de executar
+  }
+  
+  // 4. Atualiza a tela
+  document.getElementById('tempo').textContent = `${s}s`;
+}
+
+function atualizarProgresso(pct) {
+  document.getElementById('progresso').style.width = `${pct}%`;
+}
+
+// ============================================================
+//  INICIAR AO CARREGAR
+// ============================================================
+iniciarJogo();
+</script>
+</body>
+</html>
