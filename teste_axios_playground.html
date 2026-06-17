@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Rápido - Axios Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .painel {
+            background: #2d2d2d;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        h1 {
+            grid-column: 1 / -1;
+            color: #00d4ff;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .botao-grupo {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px;
+            background: #00d4ff;
+            color: #1e1e1e;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #00e5ff;
+            transform: translateX(5px);
+        }
+
+        button:active {
+            transform: translateX(3px);
+        }
+
+        .botao-pequeno {
+            padding: 8px;
+            font-size: 12px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #1e1e1e;
+            border: 1px solid #444;
+            color: #00d4ff;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .console {
+            background: #0a0a0a;
+            border: 1px solid #00d4ff;
+            border-radius: 3px;
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+
+        .console-linha {
+            margin-bottom: 8px;
+            padding: 5px;
+            border-left: 3px solid #00d4ff;
+            padding-left: 10px;
+        }
+
+        .console-linha.log {
+            color: #00d4ff;
+            border-left-color: #00d4ff;
+        }
+
+        .console-linha.error {
+            color: #ff4444;
+            border-left-color: #ff4444;
+        }
+
+        .console-linha.success {
+            color: #00ff00;
+            border-left-color: #00ff00;
+        }
+
+        .console-linha.warning {
+            color: #ffaa00;
+            border-left-color: #ffaa00;
+        }
+
+        .resultado {
+            background: #1a1a1a;
+            border: 1px solid #00d4ff;
+            border-radius: 3px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+
+        .resultado-title {
+            color: #00ff00;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            background: #0a0a0a;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+
+        .label {
+            color: #00d4ff;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .status.loading {
+            background: #ffaa00;
+            color: #1e1e1e;
+        }
+
+        .status.success {
+            background: #00ff00;
+            color: #1e1e1e;
+        }
+
+        .status.error {
+            background: #ff4444;
+            color: #fff;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #444;
+            margin: 20px 0;
+        }
+
+        .dica {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            border-radius: 3px;
+            margin-bottom: 15px;
+            font-size: 13px;
+        }
+
+        .dica strong {
+            color: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Teste Rápido - Axios Playground</h1>
+
+    <div class="container">
+        <!-- Painel Esquerdo: Exemplos Prontos -->
+        <div class="painel">
+            <h2>📚 Exemplos Rápidos</h2>
+
+            <div class="dica">
+                <strong>💡 Dica:</strong> Clique em um botão e veja o resultado no console abaixo!
+            </div>
+
+            <div class="botao-grupo">
+                <button onclick="testeGetSimples()">1️⃣ GET Simples</button>
+                <button onclick="testeGetComParams()">2️⃣ GET com Parâmetros</button>
+                <button onclick="testePost()">3️⃣ POST - Criar Dado</button>
+                <button onclick="testePut()">4️⃣ PUT - Atualizar Dado</button>
+                <button onclick="testeDelete()">5️⃣ DELETE - Deletar Dado</button>
+                <button onclick="testeMultiplas()">6️⃣ Múltiplas Requisições</button>
+                <button onclick="testeErro()">7️⃣ Tratamento de Erro</button>
+                <button onclick="testeTimeout()">8️⃣ Com Timeout</button>
+                <button onclick="testeFormulario()">9️⃣ Enviar Formulário</button>
+                <button onclick="testeHeaders()">🔟 Com Headers</button>
+            </div>
+
+            <hr>
+
+            <h2>🧪 Teste Customizado</h2>
+
+            <span class="label">Método HTTP:</span>
+            <select id="metodo" style="width: 100%; padding: 8px; margin-bottom: 10px; background: #1e1e1e; color: #00d4ff; border: 1px solid #444;">
+                <option value="get">GET</option>
+                <option value="post">POST</option>
+                <option value="put">PUT</option>
+                <option value="delete">DELETE</option>
+            </select>
+
+            <span class="label">URL:</span>
+            <input type="text" id="url" placeholder="https://jsonplaceholder.typicode.com/posts/1" value="https://jsonplaceholder.typicode.com/posts/1">
+
+            <span class="label">Dados (JSON):</span>
+            <textarea id="dados" placeholder='{"title": "Teste", "body": "Conteúdo"}' style="height: 80px;"></textarea>
+
+            <button onclick="testeCustomizado()">🎯 Enviar Requisição</button>
+        </div>
+
+        <!-- Painel Direito: Console e Resultados -->
+        <div class="painel">
+            <h2>📊 Console de Output</h2>
+
+            <div class="console" id="console"></div>
+
+            <div id="resultado" class="resultado" style="display: none;">
+                <div class="resultado-title">📦 Resposta da Requisição:</div>
+                <pre id="resultado-conteudo"></pre>
+            </div>
+
+            <button onclick="limparConsole()" class="botao-pequeno" style="margin-top: 10px; width: 100%;">
+                🗑️ Limpar Console
+            </button>
+        </div>
+    </div>
+
+    <!-- Axios via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        // Referências do DOM
+        const consoleDiv = document.getElementById('console');
+        const resultadoDiv = document.getElementById('resultado');
+        const resultadoConteudo = document.getElementById('resultado-conteudo');
+
+        // Funções de Log
+        function log(mensagem, tipo = 'log') {
+            const linha = document.createElement('div');
+            linha.className = `console-linha ${tipo}`;
+            
+            if (typeof mensagem === 'object') {
+                linha.textContent = JSON.stringify(mensagem, null, 2);
+            } else {
+                linha.textContent = mensagem;
+            }
+
+            consoleDiv.appendChild(linha);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        function mostrarResultado(dados) {
+            resultadoDiv.style.display = 'block';
+            resultadoConteudo.textContent = JSON.stringify(dados, null, 2);
+        }
+
+        function limparConsole() {
+            consoleDiv.innerHTML = '';
+            resultadoDiv.style.display = 'none';
+        }
+
+        // ==========================================
+        // TESTES
+        // ==========================================
+
+        // 1. GET Simples
+        async function testeGetSimples() {
+            log('▶️ Iniciando GET Simples...', 'warning');
+            try {
+                const resposta = await axios.get('https://jsonplaceholder.typicode.com/posts/1');
+                log('✅ Sucesso! Status: ' + resposta.status, 'success');
+                log('Dados recebidos:', 'log');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 2. GET com Parâmetros
+        async function testeGetComParams() {
+            log('▶️ GET com Parâmetros...', 'warning');
+            try {
+                const resposta = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+                    params: {
+                        userId: 1,
+                        _limit: 3
+                    }
+                });
+                log('✅ Sucesso! Retornou ' + resposta.data.length + ' posts', 'success');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 3. POST
+        async function testePost() {
+            log('▶️ POST - Criando novo post...', 'warning');
+            try {
+                const resposta = await axios.post('https://jsonplaceholder.typicode.com/posts', {
+                    title: 'Meu primeiro post com Axios',
+                    body: 'Este é um post criado usando Axios',
+                    userId: 1
+                });
+                log('✅ Post criado com ID: ' + resposta.data.id, 'success');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 4. PUT
+        async function testePut() {
+            log('▶️ PUT - Atualizando post...', 'warning');
+            try {
+                const resposta = await axios.put('https://jsonplaceholder.typicode.com/posts/1', {
+                    title: 'Título atualizado com Axios',
+                    body: 'Conteúdo atualizado',
+                    userId: 1
+                });
+                log('✅ Post atualizado!', 'success');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 5. DELETE
+        async function testeDelete() {
+            log('▶️ DELETE - Deletando post...', 'warning');
+            try {
+                const resposta = await axios.delete('https://jsonplaceholder.typicode.com/posts/1');
+                log('✅ Post deletado! Status: ' + resposta.status, 'success');
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 6. Múltiplas Requisições
+        async function testeMultiplas() {
+            log('▶️ Fazendo 3 requisições simultâneas...', 'warning');
+            try {
+                const [posts, usuarios, comentarios] = await Promise.all([
+                    axios.get('https://jsonplaceholder.typicode.com/posts?_limit=3'),
+                    axios.get('https://jsonplaceholder.typicode.com/users?_limit=2'),
+                    axios.get('https://jsonplaceholder.typicode.com/comments?_limit=3')
+                ]);
+                
+                log('✅ Sucesso!', 'success');
+                log('Posts: ' + posts.data.length, 'log');
+                log('Usuários: ' + usuarios.data.length, 'log');
+                log('Comentários: ' + comentarios.data.length, 'log');
+
+                mostrarResultado({
+                    posts: posts.data.length + ' posts',
+                    usuarios: usuarios.data.length + ' usuários',
+                    comentarios: comentarios.data.length + ' comentários'
+                });
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 7. Tratamento de Erro
+        async function testeErro() {
+            log('▶️ Tentando buscar recurso inexistente...', 'warning');
+            try {
+                await axios.get('https://jsonplaceholder.typicode.com/posts/999999999');
+            } catch(erro) {
+                if (erro.response) {
+                    log('❌ Erro HTTP ' + erro.response.status, 'error');
+                    log('Mensagem: ' + erro.response.statusText, 'error');
+                } else {
+                    log('❌ Erro: ' + erro.message, 'error');
+                }
+            }
+        }
+
+        // 8. Com Timeout
+        async function testeTimeout() {
+            log('▶️ Requisição com timeout de 2 segundos...', 'warning');
+            try {
+                const resposta = await axios.get(
+                    'https://jsonplaceholder.typicode.com/posts/1',
+                    { timeout: 2000 }
+                );
+                log('✅ Sucesso antes do timeout!', 'success');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log('❌ Timeout ou erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 9. Formulário
+        async function testeFormulario() {
+            log('▶️ Enviando dados de formulário...', 'warning');
+            try {
+                const dados = {
+                    nome: 'João Silva',
+                    email: 'joao@email.com',
+                    mensagem: 'Testando envio de formulário com Axios'
+                };
+
+                // Simulando envio
+                const resposta = await axios.post(
+                    'https://jsonplaceholder.typicode.com/posts',
+                    dados
+                );
+
+                log('✅ Formulário enviado com sucesso!', 'success');
+                log('ID da resposta: ' + resposta.data.id, 'log');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // 10. Com Headers
+        async function testeHeaders() {
+            log('▶️ Requisição com headers customizados...', 'warning');
+            try {
+                const resposta = await axios.get(
+                    'https://jsonplaceholder.typicode.com/posts/1',
+                    {
+                        headers: {
+                            'Custom-Header': 'Meu Header',
+                            'User-Agent': 'Axios-Playground/1.0'
+                        }
+                    }
+                );
+                log('✅ Requisição com headers enviada!', 'success');
+                log('Headers enviados:', 'log');
+                log(resposta.config.headers, 'log');
+            } catch(erro) {
+                log('❌ Erro: ' + erro.message, 'error');
+            }
+        }
+
+        // Teste Customizado
+        async function testeCustomizado() {
+            const metodo = document.getElementById('metodo').value;
+            const url = document.getElementById('url').value;
+            const dadosStr = document.getElementById('dados').value;
+
+            log(`▶️ ${metodo.toUpperCase()} ${url}`, 'warning');
+
+            try {
+                let dados = null;
+                if (dadosStr.trim()) {
+                    dados = JSON.parse(dadosStr);
+                    log('Dados: ' + JSON.stringify(dados), 'log');
+                }
+
+                let resposta;
+                switch(metodo) {
+                    case 'get':
+                        resposta = await axios.get(url);
+                        break;
+                    case 'post':
+                        resposta = await axios.post(url, dados);
+                        break;
+                    case 'put':
+                        resposta = await axios.put(url, dados);
+                        break;
+                    case 'delete':
+                        resposta = await axios.delete(url);
+                        break;
+                }
+
+                log(`✅ Sucesso! Status: ${resposta.status}`, 'success');
+                mostrarResultado(resposta.data);
+            } catch(erro) {
+                log(`❌ Erro: ${erro.message}`, 'error');
+                if (erro.response) {
+                    log(`Status HTTP: ${erro.response.status}`, 'error');
+                }
+            }
+        }
+
+        // Mensagem inicial
+        log('🎉 Bem-vindo ao Axios Playground!', 'success');
+        log('Clique em um botão de teste ou configure seu próprio teste', 'log');
+    </script>
+</body>
+</html>

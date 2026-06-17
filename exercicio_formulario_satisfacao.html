@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Satisfação - Programador Frontend</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="checkbox"],
+        input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+
+        .checkbox-item label,
+        .radio-item label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: #667eea;
+            color: white;
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .btn-submit:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-reset {
+            background: #e0e0e0;
+            color: #333;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .btn-reset:hover {
+            background: #d0d0d0;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.loading {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Formulário de Satisfação</h1>
+            <p>Curso Programador Frontend - FIRJAN SENAI</p>
+        </div>
+
+        <div class="info-box">
+            <strong>ℹ️ Importante:</strong> Este formulário utiliza a API EmailJS para enviar seus dados por email. 
+            Certifique-se de preencher corretamente seu endereço de email para receber confirmação.
+        </div>
+
+        <div id="mensagem" class="message"></div>
+
+        <form id="formularioSatisfacao">
+            <!-- Pergunta 1: Texto - Nome Completo -->
+            <div class="form-group">
+                <label for="nome">1. Qual é seu nome completo? <span class="required">*</span></label>
+                <input 
+                    type="text" 
+                    id="nome" 
+                    name="nome" 
+                    placeholder="Digite seu nome completo"
+                    required
+                >
+            </div>
+
+            <!-- Pergunta 2: Email -->
+            <div class="form-group">
+                <label for="email">2. Qual é seu endereço de email? <span class="required">*</span></label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="seu.email@exemplo.com"
+                    required
+                >
+            </div>
+
+            <!-- Pergunta 3: Select -->
+            <div class="form-group">
+                <label for="modulo">3. Qual módulo você mais gostou? <span class="required">*</span></label>
+                <select id="modulo" name="modulo" required>
+                    <option value="">-- Selecione uma opção --</option>
+                    <option value="modulo_basico">Módulo Básico (Iniciação à TI)</option>
+                    <option value="logica">Lógica de Programação</option>
+                    <option value="frontend_essencial">Frontend Essencial</option>
+                    <option value="desenvolvimento_web">Desenvolvimento Web</option>
+                    <option value="integracao">Integração de Competências</option>
+                </select>
+            </div>
+
+            <!-- Pergunta 4: Radio -->
+            <div class="form-group">
+                <label>4. Como você avalia a qualidade do ensino? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="qualidade1" name="qualidade" value="excelente" required>
+                        <label for="qualidade1">⭐ Excelente</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="qualidade2" name="qualidade" value="muito_bom">
+                        <label for="qualidade2">⭐⭐ Muito Bom</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="qualidade3" name="qualidade" value="bom">
+                        <label for="qualidade3">⭐⭐⭐ Bom</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="qualidade4" name="qualidade" value="satisfatorio">
+                        <label for="qualidade4">⭐⭐⭐⭐ Satisfatório</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="qualidade5" name="qualidade" value="precisa_melhorar">
+                        <label for="qualidade5">⭐⭐⭐⭐⭐ Precisa Melhorar</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pergunta 5: Checkbox -->
+            <div class="form-group">
+                <label>5. Quais recursos foram mais úteis? <span class="required">*</span></label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="recurso1" name="recursos" value="slides">
+                        <label for="recurso1">Slides e Apresentações</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="recurso2" name="recursos" value="exercicios">
+                        <label for="recurso2">Exercícios Práticos</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="recurso3" name="recursos" value="videos">
+                        <label for="recurso3">Vídeos Tutoriais</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="recurso4" name="recursos" value="documentacao">
+                        <label for="recurso4">Documentação e Material Escrito</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="recurso5" name="recursos" value="desafios">
+                        <label for="recurso5">Desafios e Projetos</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pergunta 6: Select -->
+            <div class="form-group">
+                <label for="dificuldade">6. Qual foi seu nível de dificuldade geral? <span class="required">*</span></label>
+                <select id="dificuldade" name="dificuldade" required>
+                    <option value="">-- Selecione uma opção --</option>
+                    <option value="muito_facil">Muito Fácil</option>
+                    <option value="facil">Fácil</option>
+                    <option value="medio">Médio</option>
+                    <option value="dificil">Difícil</option>
+                    <option value="muito_dificil">Muito Difícil</option>
+                </select>
+            </div>
+
+            <!-- Pergunta 7: Radio -->
+            <div class="form-group">
+                <label>7. Você recomendaria este curso? <span class="required">*</span></label>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="recomenda1" name="recomendacao" value="sim_muito" required>
+                        <label for="recomenda1">Sim, com certeza!</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="recomenda2" name="recomendacao" value="sim">
+                        <label for="recomenda2">Sim, recomendo</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="recomenda3" name="recomendacao" value="talvez">
+                        <label for="recomenda3">Talvez</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="recomenda4" name="recomendacao" value="nao">
+                        <label for="recomenda4">Não recomendo</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pergunta 8: Checkbox -->
+            <div class="form-group">
+                <label>8. Quais tópicos você gostaria de aprofundar? <span class="required">*</span></label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="topico1" name="topicos" value="react">
+                        <label for="topico1">React e Componentes</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="topico2" name="topicos" value="css">
+                        <label for="topico2">CSS Avançado e Design Responsivo</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="topico3" name="topicos" value="apis">
+                        <label for="topico3">Integração com APIs</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="topico4" name="topicos" value="testes">
+                        <label for="topico4">Testes e Qualidade de Código</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="topico5" name="topicos" value="deploy">
+                        <label for="topico5">Deploy e Publicação</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pergunta 9: Text (sugestões) -->
+            <div class="form-group">
+                <label for="sugestoes">9. Quais são suas principais sugestões de melhoria?</label>
+                <textarea 
+                    id="sugestoes" 
+                    name="sugestoes" 
+                    placeholder="Digite suas sugestões aqui..."
+                ></textarea>
+            </div>
+
+            <!-- Pergunta 10: Textarea (comentários) -->
+            <div class="form-group">
+                <label for="comentarios">10. Comentários adicionais: <span class="required">*</span></label>
+                <textarea 
+                    id="comentarios" 
+                    name="comentarios" 
+                    placeholder="Conte-nos o que achou do curso..."
+                    required
+                ></textarea>
+            </div>
+
+            <div class="button-group">
+                <button type="reset" class="btn-reset">Limpar Formulário</button>
+                <button type="submit" class="btn-submit">Enviar Formulário</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Axios via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- EmailJS via CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
+
+    <script>
+        // Configuração EmailJS (Você precisa registrar em https://www.emailjs.com)
+        // Substitua pelos seus IDs do EmailJS
+        const EMAILJS_SERVICE_ID = 'service_seu_id'; // Substitua aqui
+        const EMAILJS_TEMPLATE_ID = 'template_seu_id'; // Substitua aqui
+        const EMAILJS_PUBLIC_KEY = 'sua_chave_publica'; // Substitua aqui
+
+        // Inicializar EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Referências aos elementos
+        const formulario = document.getElementById('formularioSatisfacao');
+        const mensagemDiv = document.getElementById('mensagem');
+
+        // Função para exibir mensagens
+        function mostrarMensagem(texto, tipo) {
+            mensagemDiv.textContent = texto;
+            mensagemDiv.className = `message ${tipo}`;
+            mensagemDiv.style.display = 'block';
+            
+            if (tipo === 'success') {
+                setTimeout(() => {
+                    mensagemDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Função para coletar dados do formulário
+        function coletarDados() {
+            const dados = {
+                nome: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                modulo: document.getElementById('modulo').value,
+                qualidade: document.querySelector('input[name="qualidade"]:checked')?.value || '',
+                recursos: Array.from(document.querySelectorAll('input[name="recursos"]:checked'))
+                    .map(el => el.value).join(', '),
+                dificuldade: document.getElementById('dificuldade').value,
+                recomendacao: document.querySelector('input[name="recomendacao"]:checked')?.value || '',
+                topicos: Array.from(document.querySelectorAll('input[name="topicos"]:checked'))
+                    .map(el => el.value).join(', '),
+                sugestoes: document.getElementById('sugestoes').value,
+                comentarios: document.getElementById('comentarios').value,
+                data_envio: new Date().toLocaleDateString('pt-BR')
+            };
+            return dados;
+        }
+
+        // Event listener para submit
+        formulario.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const botaoSubmit = document.querySelector('.btn-submit');
+            const botaoOriginal = botaoSubmit.innerHTML;
+
+            try {
+                // Mostrar carregamento
+                mostrarMensagem('📤 Enviando formulário...', 'loading');
+                botaoSubmit.disabled = true;
+                botaoSubmit.innerHTML = '<span class="loading-spinner"></span>Enviando...';
+
+                // Coletar dados
+                const dados = coletarDados();
+
+                // Fazer requisição com Axios para enviar email
+                const resposta = await axios.post('https://api.emailjs.com/api/v1.0/email/send', {
+                    service_id: EMAILJS_SERVICE_ID,
+                    template_id: EMAILJS_TEMPLATE_ID,
+                    user_id: EMAILJS_PUBLIC_KEY,
+                    template_params: {
+                        to_email: dados.email,
+                        nome: dados.nome,
+                        modulo: dados.modulo,
+                        qualidade: dados.qualidade,
+                        recursos: dados.recursos || 'Nenhum selecionado',
+                        dificuldade: dados.dificuldade,
+                        recomendacao: dados.recomendacao,
+                        topicos: dados.topicos || 'Nenhum selecionado',
+                        sugestoes: dados.sugestoes || 'Nenhuma sugestão',
+                        comentarios: dados.comentarios,
+                        data_envio: dados.data_envio
+                    }
+                });
+
+                if (resposta.status === 200) {
+                    mostrarMensagem(
+                        `✅ Formulário enviado com sucesso! Verifique seu email (${dados.email})`, 
+                        'success'
+                    );
+                    formulario.reset();
+                } else {
+                    mostrarMensagem('❌ Erro ao enviar. Tente novamente.', 'error');
+                }
+            } catch (erro) {
+                console.error('Erro:', erro);
+                mostrarMensagem(
+                    '❌ Erro ao enviar formulário. Verifique os IDs do EmailJS configurados.', 
+                    'error'
+                );
+            } finally {
+                botaoSubmit.disabled = false;
+                botaoSubmit.innerHTML = botaoOriginal;
+            }
+        });
+
+        // Validação simples de checkbox
+        formulario.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox') {
+                const grupo = e.target.name;
+                const checkboxes = document.querySelectorAll(`input[name="${grupo}"]`);
+                const algumSelecionado = Array.from(checkboxes).some(cb => cb.checked);
+                
+                if (!algumSelecionado && grupo === 'recursos') {
+                    console.warn('Selecione pelo menos um recurso');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
